@@ -1,24 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from "react";
+import AddBoulder from "./components/AddBoulder"
+import ListBoulders from "./components/ListBoulders"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import axios from "axios";
 
 function App() {
+  const [boulders, setBoulders] = useState([]);
+  // const url = "http://localhost:5000/";
+
+  const onAdd = async (boulder) => {
+    // const { data } = await axios.post(url, boulder)
+    setBoulders([...boulders, boulder])
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <h1>mountain project</h1>
+        <Switch>
+          <Route path="/new" >
+            <AddBoulder onAdd={onAdd} />
+          </Route>
+          <Route path="/" exact>
+            <ListBoulders allBoulders={boulders} />
+          </Route>
+        </Switch>
+        {console.log(boulders)}
+      </div>
+    </Router>
   );
 }
 

@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const Boulder = require("./models/boulderModel");
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.use(cors());
 app.get("/", (req, res) => {
     res.send("hello world");
 })
+
+// app.post("")
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
