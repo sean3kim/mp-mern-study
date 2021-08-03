@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
+import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import { addBoulder } from '../features/boulders/bouldersSlice';
 
-const AddBoulder = ({ onAdd }) => {
+const AddBoulder = () => {
     const [name, setName] = useState("")
     const [grade, setGrade] = useState(0)
     const [location, setLocation] = useState("")
 
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onAdd({ name, grade, location });
+        dispatch(addBoulder({ name, grade, location }));
         setName("")
         setGrade(0)
         setLocation("")

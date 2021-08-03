@@ -1,8 +1,10 @@
 import React from 'react'
 import Boulder from "./Boulder"
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const ListBoulders = ({ allBoulders, onDelete }) => {
+const ListBoulders = () => {
+    const allBoulders = useSelector((state) => state.boulders.boulders)
     return (
         <div>
             {allBoulders.map((boulder) => (
@@ -10,7 +12,6 @@ const ListBoulders = ({ allBoulders, onDelete }) => {
                     key={boulder._id}
                     id={boulder._id}
                     boulder={boulder}
-                    onDelete={onDelete}
                 />
             ))}
             <Link to="/new">add a new boulder</Link>

@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { editBoulder } from "../features/boulders/bouldersSlice";
 
-const EditBoulder = ({ allBoulders, onEdit }) => {
+const EditBoulder = () => {
     const [name, setName] = useState("")
     const [grade, setGrade] = useState(0)
     const [location, setLocation] = useState("")
 
     const history = useHistory();
     const { id } = useParams();
+    const dispatch = useDispatch();
+    const allBoulders = useSelector((state) => state.boulders.boulders);
 
 
     useEffect(() => {
@@ -19,7 +23,7 @@ const EditBoulder = ({ allBoulders, onEdit }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onEdit({ _id: id, name, grade, location });
+        dispatch(editBoulder({ _id: id, name, grade, location }))
         setName("")
         setGrade(0)
         setLocation("")
