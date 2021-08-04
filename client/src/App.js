@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import AddBoulder from "./components/AddBoulder"
 import ListBoulders from "./components/ListBoulders"
 import EditBoulder from "./components/EditBoulder"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Search from "./components/Search";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersSlice";
 
 function App() {
@@ -23,10 +24,16 @@ function App() {
             <AddBoulder />
           </Route>
           <Route path="/" exact>
+            <Search />
             <ListBoulders />
           </Route>
           <Route path="/edit/:id">
             <EditBoulder />
+          </Route>
+          <Route path="/test">
+            <Search />
+            <ListBoulders />
+            <Link to={{ pathname: "/", state: { fromSearch: true } }}>back to index</Link>
           </Route>
         </Switch>
       </div>

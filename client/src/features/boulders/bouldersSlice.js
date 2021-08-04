@@ -7,9 +7,7 @@ export const fetchBoulders = createAsyncThunk(
     "boulders/fetch",
     async () => {
         const { data } = await axios.get(`${url}/`);
-        console.log(data);
         const toListBoulders = Object.keys(data).map(key => data[key]);
-        console.log(toListBoulders);
         return toListBoulders;
     }
 )
@@ -42,9 +40,18 @@ export const bouldersSlice = createSlice({
     name: "boulders",
     initialState: {
         boulders: [],
+        searchedFilter: [],
         status: null
     },
-    reducers: {},
+    reducers: {
+        searchFilter: (state, action) => {
+            const filtered = state.boulders.filter((boulder) => boulder.name === action.payload);
+            state.searchedFilter = filtered;
+        },
+        clearFilter: (state, action) => {
+            state.searchedFilter = []
+        }
+    },
     extraReducers: {
         [addBoulder.pending]: (state) => {
             state.status = "loading"
@@ -92,5 +99,5 @@ export const bouldersSlice = createSlice({
 })
 
 
-
+export const { searchFilter, clearFilter } = bouldersSlice.actions;
 export default bouldersSlice.reducer;

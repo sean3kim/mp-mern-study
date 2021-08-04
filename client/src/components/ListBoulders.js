@@ -1,10 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Boulder from "./Boulder"
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { clearFilter } from "../features/boulders/bouldersSlice";
 
 const ListBoulders = () => {
-    const allBoulders = useSelector((state) => state.boulders.boulders)
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const fromSearch = location.state;
+
+    const allBoulders = useSelector((state) => {
+        if (fromSearch || !state.boulders.searchedFilter.length) {
+            return state.boulders.boulders
+        }
+        return state.boulders.searchedFilter
+    })
+
+    useEffect(() => {
+        if (fromSearch) dispatch(clearFilter());
+    })
+
     return (
         <div>
             {allBoulders.map((boulder) => (
