@@ -45,7 +45,7 @@ export const bouldersSlice = createSlice({
     },
     reducers: {
         searchFilter: (state, action) => {
-            const filtered = state.boulders.filter((boulder) => boulder.name === action.payload);
+            const filtered = state.boulders.filter((boulder) => boulder.name.includes(action.payload));
             state.searchedFilter = filtered;
         },
         clearFilter: (state, action) => {
