@@ -7,8 +7,7 @@ export const fetchBoulders = createAsyncThunk(
     "boulders/fetch",
     async () => {
         const { data } = await axios.get(`${url}/`);
-        const toListBoulders = Object.keys(data).map(key => data[key]);
-        return toListBoulders;
+        return data;
     }
 )
 
@@ -31,7 +30,15 @@ export const deleteBoulder = createAsyncThunk(
 export const editBoulder = createAsyncThunk(
     "boulders/edit",
     async (boulder) => {
-        const { data } = await axios.put(url, boulder);
+        await axios.put(url, boulder);
+        return boulder;
+    }
+)
+
+export const searchBoulderName = createAsyncThunk(
+    "boulders/searchBoulderName",
+    async (querystring) => {
+        const { data } = await axios.get(`${url}/search${querystring}`);
         return data;
     }
 )
@@ -44,37 +51,37 @@ export const bouldersSlice = createSlice({
         status: null
     },
     reducers: {
-        searchFilter: (state, action) => {
-            const filtered = state.boulders.filter((boulder) => boulder.name.includes(action.payload));
-            state.searchedFilter = filtered;
-        },
+        // searchFilter: (state, action) => {
+        //     const filtered = state.boulders.filter((boulder) => boulder.name.includes(action.payload));
+        //     state.searchedFilter = filtered;
+        // },
         clearFilter: (state, action) => {
             state.searchedFilter = []
         }
     },
     extraReducers: {
         [addBoulder.pending]: (state) => {
-            state.status = "loading"
+            state.status = "loading";
         },
         [addBoulder.fulfilled]: (state, action) => {
             state.boulders = [...state.boulders, action.payload];
             state.status = "success";
         },
         [addBoulder.rejected]: (state) => {
-            state.status = "failed"
+            state.status = "failed";
         },
         [fetchBoulders.pending]: (state) => {
-            state.status = "loading"
+            state.status = "loading";
         },
         [fetchBoulders.fulfilled]: (state, action) => {
             state.boulders = action.payload;
             state.status = "success";
         },
         [fetchBoulders.rejected]: (state) => {
-            state.status = "failed"
+            state.status = "failed";
         },
         [deleteBoulder.pending]: (state) => {
-            state.status = "loading"
+            state.status = "loading";
         },
         [deleteBoulder.fulfilled]: (state, action) => {
             const filteredBoulders = state.boulders.filter((boulder) => boulder._id !== action.payload);
@@ -82,10 +89,10 @@ export const bouldersSlice = createSlice({
             state.status = "success";
         },
         [deleteBoulder.rejected]: (state) => {
-            state.status = "failed"
+            state.status = "failed";
         },
         [editBoulder.pending]: (state) => {
-            state.status = "loading"
+            state.status = "loading";
         },
         [editBoulder.fulfilled]: (state, action) => {
             const editeBouldersList = state.boulders.map((boulder) => boulder._id === action.payload._id ? action.payload : boulder);
@@ -93,7 +100,17 @@ export const bouldersSlice = createSlice({
             state.status = "success";
         },
         [editBoulder.rejected]: (state) => {
-            state.status = "failed"
+            state.status = "failed";
+        },
+        [searchBoulderName.pending]: (state, action) => {
+            state.status = "loading";
+        },
+        [searchBoulderName.fulfilled]: (state, action) => {
+            state.searchedFilter = action.payload;
+            state.status = "success";
+        },
+        [searchBoulderName.rejected]: (state, action) => {
+            state.status = "failed";
         },
     }
 })

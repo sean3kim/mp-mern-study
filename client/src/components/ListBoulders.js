@@ -9,12 +9,7 @@ const ListBoulders = () => {
     const location = useLocation();
     const fromSearch = location.state;
 
-    const allBoulders = useSelector((state) => {
-        if (fromSearch || !state.boulders.searchedFilter.length) {
-            return state.boulders.boulders
-        }
-        return state.boulders.searchedFilter
-    })
+    const allBoulders = useSelector((state) => state.boulders.boulders);
 
     useEffect(() => {
         if (fromSearch) dispatch(clearFilter());

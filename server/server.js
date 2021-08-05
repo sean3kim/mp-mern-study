@@ -25,7 +25,7 @@ app.use(cors());
 
 app.get("/", async (req, res) => {
     const allBoulders = await Boulder.find();
-    res.json({ ...allBoulders });
+    res.json(allBoulders);
 })
 
 app.post("/new", async (req, res) => {
@@ -45,6 +45,12 @@ app.put("/", async (req, res) => {
     const boulder = { ...req.body };
     const editedBoulder = await Boulder.findByIdAndUpdate(boulder._id, boulder, { new: true })
     res.json(editedBoulder);
+})
+
+app.get("/search", async (req, res) => {
+    const searchName = req.query.s;
+    const foundBoulders = await Boulder.find({ name: { $regex: searchName } });
+    res.json(foundBoulders);
 })
 
 const port = process.env.PORT || 5000;

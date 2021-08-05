@@ -1,27 +1,27 @@
 import React from 'react'
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { searchFilter } from "../features/boulders/bouldersSlice";
 import { useHistory } from "react-router-dom";
 
+// search form
+//   takes search input and redirects to url with the query string
+//   searched component reads the query string and pulls from database
 const Search = () => {
-    const [searchText, setSearchText] = useState('');
-    const dispatch = useDispatch();
+    const [searchText, setSearchText] = useState("");
     const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(searchFilter(searchText));
+        history.push(`/search?s=${searchText}`);
         setSearchText("");
-        history.push("/test");
     }
 
     return (
         <div>
-            <form action="/test" onSubmit={handleSubmit}>
+            <form action="/search" onSubmit={handleSubmit}>
                 <input
                     type="text"
                     placeholder="search..."
+                    value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                 />
             </form>
