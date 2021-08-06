@@ -51,10 +51,6 @@ export const bouldersSlice = createSlice({
         status: null
     },
     reducers: {
-        // searchFilter: (state, action) => {
-        //     const filtered = state.boulders.filter((boulder) => boulder.name.includes(action.payload));
-        //     state.searchedFilter = filtered;
-        // },
         clearFilter: (state, action) => {
             state.searchedFilter = []
         }
@@ -116,5 +112,5 @@ export const bouldersSlice = createSlice({
 })
 
 
-export const { searchFilter, clearFilter } = bouldersSlice.actions;
+export const { clearFilter } = bouldersSlice.actions;
 export default bouldersSlice.reducer;

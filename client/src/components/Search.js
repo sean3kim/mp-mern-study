@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { AppBar, Toolbar, Typography, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 

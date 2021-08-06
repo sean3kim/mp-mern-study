@@ -5,6 +5,7 @@ import ListBoulders from "./components/ListBoulders"
 import EditBoulder from "./components/EditBoulder"
 import Searched from "./components/Searched";
 import NavBar from "./components/NavBar";
+import BoulderPage from "./components/BoulderPage";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersSlice";
 import { Container } from "@material-ui/core";
@@ -35,6 +36,9 @@ function App() {
             <Route path="/search">
               <Searched />
               <Link to={{ pathname: "/", state: { fromSearch: true } }}>back to index</Link>
+            </Route>
+            <Route path="/show/:id">
+              <BoulderPage />
             </Route>
           </Switch>
         </Container>
