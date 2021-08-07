@@ -8,7 +8,7 @@ const BoulderSchema = new Schema({
     description: String,
     tags: {
         type: [String],
-        enum: ["powerful, endurance, technical, highball, lowball, crimpy, slopey"]
+        enum: ["powerful", "endurance", "technical", "highball", "lowball", "crimpy", "slopey"]
     }
 })
 

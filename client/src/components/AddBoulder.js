@@ -1,22 +1,51 @@
 import React, { useState } from 'react'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { addBoulder } from '../features/boulders/bouldersSlice';
+
+
 
 const AddBoulder = () => {
     const [name, setName] = useState("")
     const [grade, setGrade] = useState(0)
     const [location, setLocation] = useState("")
+    const [description, setDescription] = useState("")
+    const [tags, setTags] = useState([])
+    const [isChecked, setIsChecked] = useState(new Array(7).fill(false));
 
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        dispatch(addBoulder({ name, grade, location }));
+    const availableTags = useSelector((state) => state.boulders.availableTags)
+
+    const clearStates = () => {
         setName("")
         setGrade(0)
         setLocation("")
+        setDescription("")
+        setTags([])
+        setIsChecked(isChecked.fill(false))
+    }
+
+    const handleCheckboxChange = (pos, tag) => {
+        const changedCheckbox =
+            isChecked.map((check, index) => index === pos ? !check : check)
+        setIsChecked(changedCheckbox);
+
+        const updatedTags = changedCheckbox.reduce((newArr, currentValue, currentIndex) => {
+            if (currentValue) {
+                newArr.push(availableTags[currentIndex]);
+            }
+            return newArr;
+        }, [])
+        setTags(updatedTags);
+    }
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(addBoulder({ name, grade, location, description, tags }));
+        clearStates();
         history.push("/");
     }
 
@@ -46,6 +75,33 @@ const AddBoulder = () => {
                         onChange={(e) => setLocation(e.target.value)} />
                 </div>
 
+                <div>
+                    <textarea
+                        name="description"
+                        id="description"
+                        cols="30"
+                        rows="10"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    >
+                        describe the climb
+                    </textarea>
+                </div>
+
+                <div>
+                    <fieldset>
+                        <legend>choose the styles of the boulder</legend>
+                        {availableTags.map((tag, index) => {
+                            return (
+                                <div key={index}>
+                                    <input type="checkbox" name="tags" id={tag} value={tag}
+                                        onChange={() => handleCheckboxChange(index, tag)} />
+                                    <label htmlFor={tag} name="tags">{tag}</label><br />
+                                </div>
+                            )
+                        })}
+                    </fieldset>
+                </div>
                 <div>
                     <button>add boulder</button>
                 </div>

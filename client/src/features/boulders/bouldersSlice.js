@@ -48,6 +48,7 @@ export const bouldersSlice = createSlice({
     initialState: {
         boulders: [],
         searchedFilter: [],
+        availableTags: ["powerful", "endurance", "technical", "highball", "lowball", "crimpy", "slopey"],
         status: null
     },
     reducers: {

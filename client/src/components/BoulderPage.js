@@ -20,13 +20,18 @@ const BoulderPage = () => {
                 <Typography variant="h3">
                     {boulder.name}
                 </Typography>
+                <Typography>{boulder.tags.join(" ")}</Typography>
                 <Box mb={2}>
                     <Typography variant="h6">v{boulder.grade}</Typography>
                 </Box>
-                <Typography variant="h5">Description</Typography>
+                <Typography variant="h5">description</Typography>
+                <Typography variant="body1">{boulder.description}</Typography>
 
                 <Typography variant="h5" >comments</Typography>
 
+                <div>
+                    <Link to={{ pathname: `/edit/${boulder._id}`, state: { boulder } }}>edit</Link>
+                </div>
                 <Link to="/">back to home page</Link>
             </Paper>
         </div >
