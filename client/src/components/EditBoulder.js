@@ -118,7 +118,7 @@ const EditBoulder = () => {
                     <button>edit boulder</button>
                 </div>
             </form>
-            <Link to="/">back to index page</Link>
+            <Link to="/index">back to index page</Link>
 
         </div >
     )

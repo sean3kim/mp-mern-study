@@ -8,10 +8,10 @@ const Boulder = ({ boulder }) => {
     return (
         <div>
             <Link to={{ pathname: `/show/${boulder._id}`, state: { boulder } }}>
-                {boulder.name} in {boulder.location} - v{boulder.grade}
-                <button onClick={() => dispatch(deleteBoulder(boulder._id))}>delete</button>
+                {boulder.name}
             </Link>
-            {/* <Link to={`/edit/${boulder._id}`}> edit</Link> */}
+            <span> in {boulder.location} - v{boulder.grade} </span>
+            <button onClick={() => dispatch(deleteBoulder(boulder._id))}>delete</button>
 
         </div >
     )

@@ -32,7 +32,7 @@ const BoulderPage = () => {
                 <div>
                     <Link to={{ pathname: `/edit/${boulder._id}`, state: { boulder } }}>edit</Link>
                 </div>
-                <Link to="/">back to home page</Link>
+                <Link to="/index">back to index page</Link>
             </Paper>
         </div >
     )
