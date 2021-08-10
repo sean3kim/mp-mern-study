@@ -11,10 +11,33 @@ export const fetchBoulders = createAsyncThunk(
     }
 )
 
+export const fetchOneBoulder = createAsyncThunk(
+    "boulders/fetchOne",
+    async (id) => {
+        const { data } = await axios.get(`${url}/show/${id}`)
+        return data;
+    }
+)
+
+// export const fetchAreaBoulders = createAsyncThunk(
+//     "boulders/fetchArea",
+//     async () => {
+//         const {data} = await axios.get(`${url}/area`)
+//     }
+// )
+
 export const addBoulder = createAsyncThunk(
     "boulders/add",
     async (boulder) => {
         const { data } = await axios.post(`${url}/new`, boulder)
+        return data;
+    }
+)
+
+export const addCommentToBoulder = createAsyncThunk(
+    "boulders/addComment",
+    async ({ comment, boulderId }) => {
+        const { data } = await axios.put(`${url}/show/${boulderId}/add_comment`, comment);
         return data;
     }
 )
@@ -24,6 +47,14 @@ export const deleteBoulder = createAsyncThunk(
     async (id) => {
         await axios.delete(url, { data: { id } });
         return id;
+    }
+)
+
+export const deleteCommentFromBoulder = createAsyncThunk(
+    "boulders/deleteComment",
+    async ({ boulderId, commentId }) => {
+        const { data } = await axios.delete(`${url}/show/${boulderId}`, { data: { commentId } });
+        return data;
     }
 )
 
@@ -52,7 +83,7 @@ export const bouldersSlice = createSlice({
         status: null
     },
     reducers: {
-        clearFilter: (state, action) => {
+        clearFilter: (state) => {
             state.searchedFilter = []
         }
     },
@@ -92,8 +123,8 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [editBoulder.fulfilled]: (state, action) => {
-            const editeBouldersList = state.boulders.map((boulder) => boulder._id === action.payload._id ? action.payload : boulder);
-            state.boulders = editeBouldersList;
+            const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload._id ? action.payload : boulder);
+            state.boulders = editedBouldersList;
             state.status = "success";
         },
         [editBoulder.rejected]: (state) => {
@@ -107,6 +138,38 @@ export const bouldersSlice = createSlice({
             state.status = "success";
         },
         [searchBoulderName.rejected]: (state, action) => {
+            state.status = "failed";
+        },
+        [addCommentToBoulder.pending]: (state, action) => {
+            state.status = "loading";
+        },
+        [addCommentToBoulder.fulfilled]: (state, action) => {
+            const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload._id ? action.payload : boulder);
+            state.boulders = editedBouldersList;
+            state.status = "success";
+        },
+        [addCommentToBoulder.rejected]: (state, action) => {
+            state.status = "failed";
+        },
+        [deleteCommentFromBoulder.pending]: (state, action) => {
+            state.status = "loading";
+        },
+        [deleteCommentFromBoulder.fulfilled]: (state, action) => {
+            const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload._id ? action.payload : boulder);
+            state.boulders = editedBouldersList;
+            state.status = "success";
+        },
+        [deleteCommentFromBoulder.rejected]: (state, action) => {
+            state.status = "failed";
+        },
+        [fetchOneBoulder.pending]: (state, action) => {
+            state.status = "loading";
+        },
+        [fetchOneBoulder.fulfilled]: (state, action) => {
+            state.boulders = [...state.boulders, action.payload]
+            state.status = "success";
+        },
+        [fetchOneBoulder.rejected]: (state, action) => {
             state.status = "failed";
         },
     }

@@ -9,7 +9,8 @@ const BoulderSchema = new Schema({
     tags: {
         type: [String],
         enum: ["powerful", "endurance", "technical", "highball", "lowball", "crimpy", "slopey"]
-    }
+    },
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }]
 })
 
 module.exports = mongoose.model("Boulder", BoulderSchema);

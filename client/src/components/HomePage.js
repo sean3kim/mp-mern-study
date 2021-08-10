@@ -7,7 +7,9 @@ const HomePage = () => {
         <div>
             <Typography>welcome to the homepage</Typography>
             <Link to="/index">to all boulders</Link>
-
+            <div>
+                <Link to="/areas/carver">area page</Link>
+            </div>
         </div>
     )
 }

@@ -81,6 +81,7 @@ const AddBoulder = () => {
                         id="description"
                         cols="30"
                         rows="10"
+                        placeholder="add a description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     >
