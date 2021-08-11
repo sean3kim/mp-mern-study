@@ -166,7 +166,10 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [fetchOneBoulder.fulfilled]: (state, action) => {
-            state.boulders = [...state.boulders, action.payload]
+            // if the action payload is already in state boulders, just return state
+            if (!state.boulders.find((boulder) => boulder._id === action.payload._id)) {
+                state.boulders = [...state.boulders, action.payload]
+            }
             state.status = "success";
         },
         [fetchOneBoulder.rejected]: (state, action) => {

@@ -15,56 +15,55 @@ const useStyles = makeStyles({
 
 const BoulderPage = () => {
     const dispatch = useDispatch();
-    const location = useLocation();
     const { id } = useParams();
-    const { boulder } = location.state;
     const classes = useStyles();
 
-    // useEffect(() => {
-    //     dispatch(fetchOneBoulder(id));
-    // }, [])
+    useEffect(() => {
+        dispatch(fetchOneBoulder(id));
+    }, [])
 
     const boulderFromStore = useSelector((state) => {
-        // console.log("url id", id)
-        const test = state.boulders.boulders.find((b) => b._id === id)
-        // console.log("test", test)
-        return test
+        const foundBoulder = state.boulders.boulders.find((b) => b._id === id)
+        return foundBoulder;
     })
 
     const handleDeleteComment = (commentId) => {
-        dispatch(deleteCommentFromBoulder({ boulderId: boulder._id, commentId }))
+        dispatch(deleteCommentFromBoulder({ boulderId: boulderFromStore._id, commentId }))
     }
 
     return (
         <div>
             <Paper elevation={6} className={classes.paper} >
-                <Typography variant="h3">
-                    {boulder.name}
-                </Typography>
-                <Typography>{boulder.tags.join(" ")}</Typography>
-                <Box mb={2}>
-                    <Typography variant="h6">v{boulder.grade}</Typography>
-                </Box>
-                <Typography variant="h5">description</Typography>
-                <Typography variant="body1">{boulder.description}</Typography>
 
-                <Typography variant="h5" >comments</Typography>
-                <Link to={`/show/${boulder._id}/add_comment`}>add a comment</Link>
+                {boulderFromStore &&
+                    <div>
+                        <Typography variant="h3">
+                            {boulderFromStore.name}
+                        </Typography>
+                        <Typography>{boulderFromStore.tags.join(" ")}</Typography>
+                        <Box mb={2}>
+                            <Typography variant="h6">v{boulderFromStore.grade}</Typography>
+                        </Box>
+                        <Typography variant="h5">description</Typography>
+                        <Typography variant="body1">{boulderFromStore.description}</Typography>
 
-                {/* {console.log(boulderFromStore)} */}
-                <div>
-                    {boulderFromStore.comments.map((comment) => (
-                        < Comment
-                            key={comment._id}
-                            comment={comment}
-                            onDeleteComment={handleDeleteComment}
-                        />
-                    ))}
-                </div>
+                        <Typography variant="h5" >comments</Typography>
+                        <Link to={`/show/${boulderFromStore._id}/add_comment`}>add a comment</Link>
 
-                <div>
-                    <Link to={{ pathname: `/edit/${boulder._id}`, state: { boulder } }}>edit</Link>
-                </div>
+                        <div>
+                            {boulderFromStore.comments.map((comment) => (
+                                < Comment
+                                    key={comment._id}
+                                    comment={comment}
+                                    onDeleteComment={handleDeleteComment}
+                                />
+                            ))}
+                        </div>
+                        <div>
+                            <Link to={{ pathname: `/edit/${boulderFromStore._id}`, state: { boulder: boulderFromStore } }}>edit</Link>
+                        </div>
+                    </div>
+                }
                 <Link to="/index">back to index page</Link>
             </Paper>
         </div >

@@ -34,7 +34,7 @@ app.post("/new", async (req, res) => {
     const addBoulder = new Boulder(newBoulder);
     await addBoulder.save();
     const populatedBoulder = await Boulder.populate(addBoulder, "comments")
-    res.json(addBoulder);
+    res.json(populatedBoulder);
 })
 
 app.delete("/", async (req, res) => {
@@ -54,7 +54,6 @@ app.delete("/show/:boulderId", async (req, res) => {
 app.get("/show/:boulderId", async (req, res) => {
     const { boulderId } = req.params;
     const foundBoulder = await Boulder.findById(boulderId).populate("comments");
-    console.log("sent", foundBoulder)
     res.json(foundBoulder);
 })
 
