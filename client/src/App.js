@@ -7,8 +7,9 @@ import Searched from "./components/Searched";
 import NavBar from "./components/NavBar";
 import BoulderPage from "./components/BoulderPage";
 import HomePage from "./components/HomePage";
-import AreaPage from "./components/AreaPage";
+// import AreaPage from "./components/AreaPage";
 import AddComment from "./components/AddComment";
+import LoginPage from "./components/LoginPage";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersSlice";
 import { Container } from "@material-ui/core";
@@ -33,9 +34,9 @@ function App() {
             <Route path="/" exact>
               <HomePage />
             </Route>
-            <Route path="/areas/:area">
+            {/* <Route path="/areas/:area">
               <AreaPage />
-            </Route>
+            </Route> */}
             <Route path="/index" >
               <ListBoulders />
             </Route>
@@ -51,6 +52,9 @@ function App() {
             </Route>
             <Route path="/show/:id">
               <BoulderPage />
+            </Route>
+            <Route path="/login">
+              <LoginPage />
             </Route>
           </Switch>
         </Container>

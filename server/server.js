@@ -1,6 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")
 const Boulder = require("./models/boulderModel");
 const Comment = require("./models/commentModel");
 
@@ -22,7 +26,27 @@ db.once("open", () => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+
+const sessionConfig = {
+    secret: "seankim",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,      // this is a week
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    },
+    store: MongoStore.create({
+        mongoUrl: dbURL,
+        secret: "seankim",
+        touchAfter: 24 * 60 * 60
+    })
+}
+app.use(session(sessionConfig))
+
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.get("/", async (req, res) => {
     const allBoulders = await Boulder.find().populate("comments");

@@ -6,7 +6,7 @@ const url = "http://localhost:5000";
 export const fetchBoulders = createAsyncThunk(
     "boulders/fetch",
     async () => {
-        const { data } = await axios.get(`${url}/`);
+        const { data } = await axios.get(`${url}/`, { withCredentials: true });
         return data;
     }
 )
@@ -14,7 +14,7 @@ export const fetchBoulders = createAsyncThunk(
 export const fetchOneBoulder = createAsyncThunk(
     "boulders/fetchOne",
     async (id) => {
-        const { data } = await axios.get(`${url}/show/${id}`)
+        const { data } = await axios.get(`${url}/show/${id}`, { withCredentials: true })
         return data;
     }
 )
@@ -22,7 +22,7 @@ export const fetchOneBoulder = createAsyncThunk(
 export const addBoulder = createAsyncThunk(
     "boulders/add",
     async (boulder) => {
-        const { data } = await axios.post(`${url}/new`, boulder)
+        const { data } = await axios.post(`${url}/new`, boulder, { withCredentials: true })
         return data;
     }
 )
@@ -38,7 +38,7 @@ export const addCommentToBoulder = createAsyncThunk(
 export const deleteBoulder = createAsyncThunk(
     "boulders/delete",
     async (id) => {
-        await axios.delete(url, { data: { id } });
+        await axios.delete(url, { data: { id } }, { withCredentials: true });
         return id;
     }
 )
@@ -54,7 +54,7 @@ export const deleteCommentFromBoulder = createAsyncThunk(
 export const editBoulder = createAsyncThunk(
     "boulders/edit",
     async (boulder) => {
-        await axios.put(`${url}/edit/${boulder._id}`, boulder);
+        await axios.put(`${url}/edit/${boulder._id}`, boulder, { withCredentials: true });
         return boulder;
     }
 )
@@ -62,7 +62,7 @@ export const editBoulder = createAsyncThunk(
 export const searchBoulderName = createAsyncThunk(
     "boulders/searchBoulderName",
     async (querystring) => {
-        const { data } = await axios.get(`${url}/search${querystring}`);
+        const { data } = await axios.get(`${url}/search${querystring}`, { withCredentials: true });
         return data;
     }
 )

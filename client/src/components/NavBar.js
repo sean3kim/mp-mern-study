@@ -24,6 +24,13 @@ const useStyles = makeStyles((theme) => ({
             color: "#A9E190",
             textDecoration: "none"
         }
+    },
+    loginLink: {
+        paddingLeft: "10px",
+        "&:hover": {
+            color: "#A9E190",
+            textDecoration: "none"
+        }
     }
 }))
 
@@ -39,6 +46,9 @@ const NavBar = () => {
                     </Typography>
                     <div className={classes.search} >
                         <Search />
+                    </div>
+                    <div>
+                        <Link href="/login" className={classes.loginLink} color="inherit">login</Link>
                     </div>
                 </Toolbar>
             </AppBar>
