@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
-const LoginPage = () => {
+const RegisterPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     return (
         <div>
-            <h1>login</h1>
+            <h1>register</h1>
             <form action="">
                 <div>
                     <label htmlFor="username">username</label>
@@ -32,4 +32,4 @@ const LoginPage = () => {
     )
 }
 
-export default LoginPage
+export default RegisterPage

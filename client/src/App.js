@@ -10,6 +10,7 @@ import HomePage from "./components/HomePage";
 // import AreaPage from "./components/AreaPage";
 import AddComment from "./components/AddComment";
 import LoginPage from "./components/LoginPage";
+import RegisterPage from "./components/RegisterPage";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersSlice";
 import { Container } from "@material-ui/core";
@@ -55,6 +56,9 @@ function App() {
             </Route>
             <Route path="/login">
               <LoginPage />
+            </Route>
+            <Route path="/register">
+              <RegisterPage />
             </Route>
           </Switch>
         </Container>

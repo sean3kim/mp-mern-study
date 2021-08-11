@@ -31,6 +31,13 @@ const useStyles = makeStyles((theme) => ({
             color: "#A9E190",
             textDecoration: "none"
         }
+    },
+    registerLink: {
+        paddingLeft: "10px",
+        "&:hover": {
+            color: "#A9E190",
+            textDecoration: "none"
+        }
     }
 }))
 
@@ -49,6 +56,9 @@ const NavBar = () => {
                     </div>
                     <div>
                         <Link href="/login" className={classes.loginLink} color="inherit">login</Link>
+                    </div>
+                    <div>
+                        <Link href="/register" className={classes.registerLink} color="inherit">register</Link>
                     </div>
                 </Toolbar>
             </AppBar>
