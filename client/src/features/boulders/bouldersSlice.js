@@ -19,13 +19,6 @@ export const fetchOneBoulder = createAsyncThunk(
     }
 )
 
-// export const fetchAreaBoulders = createAsyncThunk(
-//     "boulders/fetchArea",
-//     async () => {
-//         const {data} = await axios.get(`${url}/area`)
-//     }
-// )
-
 export const addBoulder = createAsyncThunk(
     "boulders/add",
     async (boulder) => {
@@ -61,7 +54,7 @@ export const deleteCommentFromBoulder = createAsyncThunk(
 export const editBoulder = createAsyncThunk(
     "boulders/edit",
     async (boulder) => {
-        await axios.put(url, boulder);
+        await axios.put(`${url}/edit/${boulder._id}`, boulder);
         return boulder;
     }
 )

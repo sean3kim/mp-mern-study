@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Paper, Typography, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import Comment from "./Comment";

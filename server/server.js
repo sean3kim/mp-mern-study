@@ -57,7 +57,7 @@ app.get("/show/:boulderId", async (req, res) => {
     res.json(foundBoulder);
 })
 
-app.put("/", async (req, res) => {
+app.put("/edit/:id", async (req, res) => {
     const boulder = { ...req.body };
     const editedBoulder = await Boulder.findByIdAndUpdate(boulder._id, boulder, { new: true }).populate("comments");
     res.json(editedBoulder);
@@ -80,17 +80,6 @@ app.put("/show/:id/add_comment", async (req, res) => {
     res.json(populatedBoulder);
 })
 
-
-// app.post("/add_comment/:id", async (req, res) => {
-//     const { id } = req.params;
-//     const { title, body } = req.body;
-//     const newComment = { title, body };
-//     const addComment = new Comment(newComment);
-//     const boulderToAddComment = await Boulder.findByIdAndUpdate(id, { $push: { comments: addComment } }, { new: true })
-//     await addComment.save();
-//     await boulderToAddComment.save();
-//     res.json(addComment);
-// })
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
