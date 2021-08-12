@@ -7,6 +7,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")
 const Boulder = require("./models/boulderModel");
 const Comment = require("./models/commentModel");
+const User = require("./models/userModel");
 
 const app = express();
 
@@ -45,8 +46,11 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig))
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get("/", async (req, res) => {
     const allBoulders = await Boulder.find().populate("comments");
@@ -102,6 +106,19 @@ app.put("/show/:id/add_comment", async (req, res) => {
     await boulderToAddComment.save();
     const populatedBoulder = await Boulder.populate(boulderToAddComment, "comments")
     res.json(populatedBoulder);
+})
+
+
+app.post("/register", async (req, res) => {
+    const { username, password, email } = req.body;
+    const user = new User({ username, password, email });
+    const registeredUser = await User.register(user, password);
+    res.json(registeredUser)
+})
+
+app.post("/login", passport.authenticate("local"), async (req, res) => {
+    res.cookie("name", "sean")
+    res.send(true);
 })
 
 
