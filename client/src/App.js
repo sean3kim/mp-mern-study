@@ -11,8 +11,10 @@ import HomePage from "./components/HomePage";
 import AddComment from "./components/AddComment";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
+import SecretPage from "./components/SecretPage";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersSlice";
+import { checkLoggedIn } from "./features/users/usersSlice";
 import { Container } from "@material-ui/core";
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchBoulders());
+    dispatch(checkLoggedIn());
   }, [])
 
   return (
@@ -59,6 +62,9 @@ function App() {
             </Route>
             <Route path="/register">
               <RegisterPage />
+            </Route>
+            <Route path="/secret">
+              <SecretPage />
             </Route>
           </Switch>
         </Container>

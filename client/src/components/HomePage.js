@@ -10,6 +10,9 @@ const HomePage = () => {
             <div>
                 <Link to="/areas/carver">area page</Link>
             </div>
+            <div>
+                <Link to="/secret">secret page</Link>
+            </div>
         </div>
     )
 }

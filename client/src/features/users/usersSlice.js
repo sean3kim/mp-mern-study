@@ -14,15 +14,31 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
     "users/login",
     async (user) => {
-        await axios.post(`${url}/login`, user, { withCredentials: true })
+        const { data } = await axios.post(`${url}/login`, user, { withCredentials: true })
+        return data
+    }
+)
+
+export const logoutUser = createAsyncThunk(
+    "users/logout",
+    async (user) => {
+        await axios.post(`${url}/logout`, user, { withCredentials: true })
         return
+    }
+)
+
+export const checkLoggedIn = createAsyncThunk(
+    "users/checkLoggedIn",
+    async () => {
+        const { data } = await axios.get(`${url}/checkLoggedIn`, { withCredentials: true })
+        return data
     }
 )
 
 export const userSlice = createSlice({
     name: "users",
     initialState: {
-        users: [],
+        users: null,
         isLoggedIn: false,
         status: null
     },
@@ -33,7 +49,8 @@ export const userSlice = createSlice({
             state.status = "loading"
         },
         [registerUser.fulfilled]: (state, action) => {
-            state.users = [...state.users, action.payload]
+            state.users = action.payload;
+            state.isLoggedIn = true;
             state.status = "success"
         },
         [registerUser.rejected]: (state, action) => {
@@ -43,10 +60,33 @@ export const userSlice = createSlice({
             state.status = "loading"
         },
         [loginUser.fulfilled]: (state, action) => {
+            state.users = action.payload;
             state.isLoggedIn = true;
             state.status = "success"
         },
         [loginUser.rejected]: (state, action) => {
+            state.status = "failed"
+        },
+        [logoutUser.pending]: (state, action) => {
+            state.status = "loading"
+        },
+        [logoutUser.fulfilled]: (state, action) => {
+            state.users = null;
+            state.isLoggedIn = false;
+            state.status = "success"
+        },
+        [logoutUser.rejected]: (state, action) => {
+            state.status = "failed"
+        },
+        [checkLoggedIn.pending]: (state, action) => {
+            state.status = "loading"
+        },
+        [checkLoggedIn.fulfilled]: (state, action) => {
+            state.users = action.payload;
+            action.payload ? state.isLoggedIn = true : state.isLoggedIn = false;
+            state.status = "success"
+        },
+        [checkLoggedIn.rejected]: (state, action) => {
             state.status = "failed"
         },
 

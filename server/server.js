@@ -52,12 +52,27 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
+function isLoggedIn(req, res, next) {
+    console.log(req.isAuthenticated())
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        return res.send("false")
+    }
+}
+
+// app.use((req, res, next) => {
+//     console.log("req.session: ", req.session);
+//     next();
+// })
+
 app.get("/", async (req, res) => {
     const allBoulders = await Boulder.find().populate("comments");
     res.json(allBoulders);
 })
 
-app.post("/new", async (req, res) => {
+app.post("/new", isLoggedIn, async (req, res) => {
     const newBoulder = { ...req.body };
     const addBoulder = new Boulder(newBoulder);
     await addBoulder.save();
@@ -85,7 +100,7 @@ app.get("/show/:boulderId", async (req, res) => {
     res.json(foundBoulder);
 })
 
-app.put("/edit/:id", async (req, res) => {
+app.put("/edit/:id", isLoggedIn, async (req, res) => {
     const boulder = { ...req.body };
     const editedBoulder = await Boulder.findByIdAndUpdate(boulder._id, boulder, { new: true }).populate("comments");
     res.json(editedBoulder);
@@ -97,7 +112,7 @@ app.get("/search", async (req, res) => {
     res.json(foundBoulders);
 })
 
-app.put("/show/:id/add_comment", async (req, res) => {
+app.put("/show/:id/add_comment", isLoggedIn, async (req, res) => {
     const { id } = req.params;
     const newComment = { title: req.body.title, body: req.body.body }
     const addComment = new Comment(newComment);
@@ -117,8 +132,28 @@ app.post("/register", async (req, res) => {
 })
 
 app.post("/login", passport.authenticate("local"), async (req, res) => {
-    res.cookie("name", "sean")
-    res.send(true);
+    res.send(req.user);
+})
+
+app.post("/logout", (req, res) => {
+    if (req.user) {
+        req.logout();
+        res.send("logged out");
+    } else {
+        res.send("no user logged in to logout")
+    }
+})
+
+app.get("/secret", isLoggedIn, (req, res) => {
+    res.send("in secret page")
+})
+
+app.get("/checkLoggedIn", (req, res) => {
+    if (req.user) {
+        res.json(req.user)
+    } else {
+        res.json(null)
+    }
 })
 
 

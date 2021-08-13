@@ -10,7 +10,8 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         dispatch(loginUser({ username, password }));
         history.push("/index");
     }
