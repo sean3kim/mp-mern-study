@@ -9,6 +9,7 @@ const Boulder = require("./models/boulderModel");
 const Comment = require("./models/commentModel");
 const User = require("./models/userModel");
 const boulderRoutes = require("./routes/boulderRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -54,53 +55,13 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        return res.send("false")
-    }
-}
-
 // app.use((req, res, next) => {
 //     console.log("req.session: ", req.session);
 //     next();
 // })
 
 app.use("/", boulderRoutes);
-
-app.post("/register", async (req, res) => {
-    const { username, password, email } = req.body;
-    const user = new User({ username, password, email });
-    const registeredUser = await User.register(user, password);
-    res.json(registeredUser)
-})
-
-app.post("/login", passport.authenticate("local"), async (req, res) => {
-    res.send(req.user);
-})
-
-app.post("/logout", (req, res) => {
-    if (req.user) {
-        req.logout();
-        res.send("logged out");
-    } else {
-        res.send("no user logged in to logout")
-    }
-})
-
-app.get("/secret", isLoggedIn, (req, res) => {
-    res.send("in secret page")
-})
-
-app.get("/checkLoggedIn", (req, res) => {
-    if (req.user) {
-        res.json(req.user)
-    } else {
-        res.json(null)
-    }
-})
-
+app.use("/", userRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
