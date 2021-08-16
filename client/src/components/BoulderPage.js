@@ -35,6 +35,7 @@ const BoulderPage = () => {
         <div>
             <Paper elevation={6} className={classes.paper} >
 
+                {console.log(boulderFromStore)}
                 {boulderFromStore &&
                     <div>
                         <Typography variant="h3">

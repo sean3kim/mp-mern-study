@@ -7,7 +7,6 @@ import Searched from "./components/Searched";
 import NavBar from "./components/NavBar";
 import BoulderPage from "./components/BoulderPage";
 import HomePage from "./components/HomePage";
-// import AreaPage from "./components/AreaPage";
 import AddComment from "./components/AddComment";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
@@ -38,9 +37,6 @@ function App() {
             <Route path="/" exact>
               <HomePage />
             </Route>
-            {/* <Route path="/areas/:area">
-              <AreaPage />
-            </Route> */}
             <Route path="/index" >
               <ListBoulders />
             </Route>

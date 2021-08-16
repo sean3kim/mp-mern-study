@@ -9,6 +9,7 @@ const EditBoulder = () => {
     const [location, setLocation] = useState("")
     const [description, setDescription] = useState("");
     const [tags, setTags] = useState([]);
+    const [comments, setComments] = useState([]);
     const [isChecked, setIsChecked] = useState(new Array(7).fill(false));
 
     const history = useHistory();
@@ -25,6 +26,7 @@ const EditBoulder = () => {
         setLocation(boulderToEdit.location);
         setDescription(boulderToEdit.description);
         setTags(boulderToEdit.tags);
+        setComments(boulderToEdit.comments);
         const initialCheckbox = availableTags.map((tag) =>
             boulderToEdit.tags.includes(tag) ? true : false
         )
@@ -57,7 +59,7 @@ const EditBoulder = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(editBoulder({ _id: id, name, grade, location, description, tags }))
+        dispatch(editBoulder({ _id: id, name, grade, location, description, tags, comments }))
         clearStates();
         history.push("/");
     }
