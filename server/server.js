@@ -1,15 +1,12 @@
+require("dotenv").config({ path: "../.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")
-const Boulder = require("./models/boulderModel");
-const Comment = require("./models/commentModel");
-const User = require("./models/userModel");
 const boulderRoutes = require("./routes/boulderRoutes");
 const userRoutes = require("./routes/userRoutes");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
@@ -30,6 +27,7 @@ db.once("open", () => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cookieParser());
 
 const sessionConfig = {
     secret: "seankim",
@@ -47,18 +45,6 @@ const sessionConfig = {
     })
 }
 app.use(session(sessionConfig))
-
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-
-// app.use((req, res, next) => {
-//     console.log("req.session: ", req.session);
-//     next();
-// })
 
 app.use("/", boulderRoutes);
 app.use("/", userRoutes);

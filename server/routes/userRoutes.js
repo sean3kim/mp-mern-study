@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
-const { isLoggedIn } = require("../middleware/auth");
+const { isAuthorized } = require("../middleware/auth");
 
 const {
     register,
@@ -19,7 +18,7 @@ router.route("/register")
     .post(register)
 
 router.route("/login")
-    .post(passport.authenticate("local"), login)
+    .post(login)
 
 router.route("/logout")
     .post(logout)
@@ -28,6 +27,6 @@ router.route("/checkLoggedIn")
     .get(checkLoggedIn)
 
 router.route("/secret")
-    .get(isLoggedIn, secret)
+    .get(isAuthorized, secret)
 
 module.exports = router;

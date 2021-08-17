@@ -1,30 +1,50 @@
+// require("dotenv").config({ path: "../.env" });
 const User = require("../models/userModel");
+const jwt = require("jsonwebtoken");
+
+const maxAge = 60 * 60 * 24 * 3
 
 exports.register = async (req, res) => {
     const { username, password, email } = req.body;
     const user = new User({ username, password, email });
-    const registeredUser = await User.register(user, password);
-    res.json(registeredUser)
+    const token = user.getSignedJWT();
+    await user.save();
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge })
+    res.json(user)
 }
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username })
+    const isMatch = user.matchPasswords(password);
+
+    const token = user.getSignedJWT();
+
+    if (isMatch) {
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge });
+    }
     res.send(req.user);
 }
 
 exports.logout = (req, res) => {
-    if (req.user) {
-        req.logout();
+    if (req.cookies.jwt) {
+        res.cookie("jwt", "", { expiresIn: Date.now() })
         res.send("logged out");
     } else {
         res.send("no user logged in to logout")
     }
 }
 
-exports.checkLoggedIn = (req, res) => {
-    if (req.user) {
-        res.json(req.user)
+exports.checkLoggedIn = async (req, res) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const user = await User.findOne({ _id: decoded.id })
+        if (user) res.json(user);
+        else res.send(false);
     } else {
-        res.json(null)
+        console.log("error not logged in")
+        res.send(false);
     }
 }
 

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddBoulder from "./components/AddBoulder"
 import ListBoulders from "./components/ListBoulders"
 import EditBoulder from "./components/EditBoulder"
@@ -11,7 +11,7 @@ import AddComment from "./components/AddComment";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import SecretPage from "./components/SecretPage";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link, Redirect } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersSlice";
 import { checkLoggedIn } from "./features/users/usersSlice";
 import { Container } from "@material-ui/core";
@@ -24,6 +24,8 @@ function App() {
     dispatch(checkLoggedIn());
   }, [])
 
+  const loginStatus = useSelector((state) => state.users.isLoggedIn)
+
   return (
     <Router>
       <div className="App">
@@ -32,7 +34,7 @@ function App() {
           <h1>mountain project</h1>
           <Switch>
             <Route path="/new" >
-              <AddBoulder />
+              {loginStatus ? <AddBoulder /> : <Redirect to="/login" />}
             </Route>
             <Route path="/" exact>
               <HomePage />
@@ -41,10 +43,10 @@ function App() {
               <ListBoulders />
             </Route>
             <Route path="/edit/:id">
-              <EditBoulder />
+              {loginStatus ? <EditBoulder /> : <Redirect to="/login" />}
             </Route>
             <Route path="/show/:id/add_comment">
-              <AddComment />
+              {loginStatus ? <AddComment /> : <Redirect to="/login" />}
             </Route>
             <Route path="/search">
               <Searched />
