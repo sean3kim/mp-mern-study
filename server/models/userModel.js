@@ -5,11 +5,18 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const UserSchema = new Schema({
-    username: String,
-    password: String,
+    username: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     boulder: [{ type: Schema.Types.ObjectId, ref: "Boulder" }],
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }]

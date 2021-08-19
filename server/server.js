@@ -7,6 +7,7 @@ const MongoStore = require("connect-mongo")
 const boulderRoutes = require("./routes/boulderRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cookieParser = require("cookie-parser");
+const errorHandler = require("./middleware/errorHandler.js");
 
 const app = express();
 
@@ -30,7 +31,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(cookieParser());
 
 const sessionConfig = {
-    secret: "seankim",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -40,7 +41,7 @@ const sessionConfig = {
     },
     store: MongoStore.create({
         mongoUrl: dbURL,
-        secret: "seankim",
+        secret: process.env.SESSION_SECRET,
         touchAfter: 24 * 60 * 60
     })
 }
@@ -48,6 +49,8 @@ app.use(session(sessionConfig))
 
 app.use("/", boulderRoutes);
 app.use("/", userRoutes);
+
+app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

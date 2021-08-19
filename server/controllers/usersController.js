@@ -1,29 +1,42 @@
-// require("dotenv").config({ path: "../.env" });
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const ErrorResponse = require("../utils/ErrorResponse");
 
 const maxAge = 60 * 60 * 24 * 3
 
-exports.register = async (req, res) => {
-    const { username, password, email } = req.body;
-    const user = new User({ username, password, email });
-    const token = user.getSignedJWT();
-    await user.save();
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge })
-    res.json(user)
+exports.register = async (req, res, next) => {
+    try {
+        const { username, password, email } = req.body;
+        const user = new User({ username, password, email });
+        const token = user.getSignedJWT();
+        await user.save();
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge })
+        res.json(user)
+    } catch (e) {
+        next(e);
+    }
 }
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
     const { username, password } = req.body;
-    const user = await User.findOne({ username })
-    const isMatch = user.matchPasswords(password);
-
-    const token = user.getSignedJWT();
-
-    if (isMatch) {
-        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge });
+    if (!username || !password) {
+        return next(new ErrorResponse("please provide username and password", 401));
     }
-    res.send(req.user);
+
+    try {
+        const user = await User.findOne({ username })
+        const isMatch = await user.matchPasswords(password);
+
+        const token = user.getSignedJWT();
+
+        if (!isMatch) {
+            return next(new ErrorResponse("invalid credentials", 401));
+        }
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge });
+        res.send(req.user);
+    } catch (e) {
+        next(e);
+    }
 }
 
 exports.logout = (req, res) => {
@@ -43,7 +56,6 @@ exports.checkLoggedIn = async (req, res) => {
         if (user) res.json(user);
         else res.send(false);
     } else {
-        console.log("error not logged in")
         res.send(false);
     }
 }

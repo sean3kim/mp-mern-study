@@ -2,9 +2,18 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const BoulderSchema = new Schema({
-    name: String,
-    grade: Number,
-    location: String,
+    name: {
+        type: String,
+        required: true
+    },
+    grade: {
+        type: Number,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
     description: String,
     tags: {
         type: [String],
