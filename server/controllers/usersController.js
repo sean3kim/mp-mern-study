@@ -33,7 +33,7 @@ exports.login = async (req, res, next) => {
             return next(new ErrorResponse("invalid credentials", 401));
         }
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge });
-        res.send(req.user);
+        res.send({ success: true, user: req.user });
     } catch (e) {
         next(e);
     }

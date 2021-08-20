@@ -57,10 +57,6 @@ function App() {
               </Route>
               <Route path="/show/:id">
                 <BoulderPage />
-                {/* {stateStatus === "failed" ?
-                  <ErrorPage /> :
-                  <BoulderPage />
-                } */}
               </Route>
               <Route path="/login">
                 <LoginPage />

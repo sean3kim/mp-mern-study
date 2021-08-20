@@ -14,8 +14,12 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
     "users/login",
     async (user) => {
-        const { data } = await axios.post(`${url}/login`, user, { withCredentials: true })
-        return data
+        try {
+            const { data } = await axios.post(`${url}/login`, user, { withCredentials: true })
+            return data
+        } catch (error) {
+            return error.response.data;
+        }
     }
 )
 
@@ -60,11 +64,29 @@ export const userSlice = createSlice({
             state.status = "loading"
         },
         [loginUser.fulfilled]: (state, action) => {
-            state.users = action.payload;
-            state.isLoggedIn = true;
-            state.status = "success"
+            switch (action.payload.success) {
+                case true:
+                    console.log("in true")
+                    state.users = action.payload.user;
+                    state.isLoggedIn = true;
+                    state.status = "success"
+                    break;
+                case false:
+                    console.log("in false")
+                    state.isLoggedIn = false;
+                    state.status = "failed";
+                    break;
+                default:
+                    console.log("in default")
+                    break;
+            }
+            // state.users = action.payload.user;
+            // state.isLoggedIn = true;
+            // state.status = "success"
         },
         [loginUser.rejected]: (state, action) => {
+            console.log("login reducer failed")
+            state.isLoggedIn = false;
             state.status = "failed"
         },
         [logoutUser.pending]: (state, action) => {

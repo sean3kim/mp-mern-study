@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { loginUser } from "../features/users/usersSlice";
 
@@ -10,10 +10,21 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const loginStatus = useSelector((state) => state.users.isLoggedIn);
+
+    useEffect(() => {
+        if (loginStatus) history.push("/index");
+        else history.push("/login");
+    }, [loginStatus])
+
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(loginUser({ username, password }));
-        history.push("/index");
+        setUsername("");
+        setPassword("");
+        // history.push("/index");
+        // if (loginStatus) history.push("/index");
+        // else history.push("/login");
     }
 
     return (
