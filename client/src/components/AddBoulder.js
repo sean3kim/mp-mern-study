@@ -46,7 +46,7 @@ const AddBoulder = () => {
         e.preventDefault();
         dispatch(addBoulder({ name, grade, location, description, tags }));
         clearStates();
-        history.push("/");
+        history.push("/index");
     }
 
     return (

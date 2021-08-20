@@ -14,24 +14,36 @@ export const fetchBoulders = createAsyncThunk(
 export const fetchOneBoulder = createAsyncThunk(
     "boulders/fetchOne",
     async (id) => {
-        const { data } = await axios.get(`${url}/show/${id}`, { withCredentials: true })
-        return data;
+        try {
+            const { data } = await axios.get(`${url}/show/${id}`, { withCredentials: true })
+            return data;
+        } catch (error) {
+            return error.response.data;
+        }
     }
 )
 
 export const addBoulder = createAsyncThunk(
     "boulders/add",
     async (boulder) => {
-        const { data } = await axios.post(`${url}/new`, boulder, { withCredentials: true })
-        return data;
+        try {
+            const { data } = await axios.post(`${url}/new`, boulder, { withCredentials: true })
+            return data;
+        } catch (error) {
+            return error.response.data
+        }
     }
 )
 
 export const addCommentToBoulder = createAsyncThunk(
     "boulders/addComment",
     async ({ comment, boulderId }) => {
-        const { data } = await axios.put(`${url}/show/${boulderId}/add_comment`, comment);
-        return data;
+        try {
+            const { data } = await axios.put(`${url}/show/${boulderId}/add_comment`, comment);
+            return data;
+        } catch (error) {
+            return error.response.data
+        }
     }
 )
 
@@ -46,16 +58,24 @@ export const deleteBoulder = createAsyncThunk(
 export const deleteCommentFromBoulder = createAsyncThunk(
     "boulders/deleteComment",
     async ({ boulderId, commentId }) => {
-        const { data } = await axios.delete(`${url}/show/${boulderId}`, { data: { commentId } });
-        return data;
+        try {
+            const { data } = await axios.delete(`${url}/show/${boulderId}`, { data: { commentId } });
+            return data;
+        } catch (error) {
+            return error.response.data
+        }
     }
 )
 
 export const editBoulder = createAsyncThunk(
     "boulders/edit",
     async (boulder) => {
-        await axios.put(`${url}/edit/${boulder._id}`, boulder, { withCredentials: true });
-        return boulder;
+        try {
+            await axios.put(`${url}/edit/${boulder._id}`, boulder, { withCredentials: true });
+            return { success: true, boulder };
+        } catch (error) {
+            return error.response.data
+        }
     }
 )
 
@@ -78,6 +98,9 @@ export const bouldersSlice = createSlice({
     reducers: {
         clearFilter: (state) => {
             state.searchedFilter = []
+        },
+        resetStatus: (state) => {
+            state.status = null;
         }
     },
     extraReducers: {
@@ -85,10 +108,21 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [addBoulder.fulfilled]: (state, action) => {
-            state.boulders = [...state.boulders, action.payload];
-            state.status = "success";
+            console.log(action.payload)
+            switch (action.payload.success) {
+                case true:
+                    state.boulders = [...state.boulders, action.payload.boulder];
+                    state.status = "success";
+                    break;
+                case false:
+                    state.status = "failed"
+                    break;
+                default:
+                    state.status = null;
+                    break;
+            }
         },
-        [addBoulder.rejected]: (state) => {
+        [addBoulder.rejected]: (state, action) => {
             state.status = "failed";
         },
         [fetchBoulders.pending]: (state) => {
@@ -116,54 +150,93 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [editBoulder.fulfilled]: (state, action) => {
-            const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload._id ? action.payload : boulder);
-            state.boulders = editedBouldersList;
-            state.status = "success";
+            console.log(action.payload)
+            switch (action.payload.success) {
+                case true:
+                    const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload.boulder._id ? action.payload.boulder : boulder);
+                    state.boulders = editedBouldersList;
+                    state.status = "success";
+                    break;
+                case false:
+                    state.status = "failed";
+                    break;
+                default:
+                    state.status = null;
+                    break;
+            }
         },
         [editBoulder.rejected]: (state) => {
             state.status = "failed";
         },
-        [searchBoulderName.pending]: (state, action) => {
+        [searchBoulderName.pending]: (state) => {
             state.status = "loading";
         },
         [searchBoulderName.fulfilled]: (state, action) => {
             state.searchedFilter = action.payload;
             state.status = "success";
         },
-        [searchBoulderName.rejected]: (state, action) => {
+        [searchBoulderName.rejected]: (state) => {
             state.status = "failed";
         },
-        [addCommentToBoulder.pending]: (state, action) => {
+        [addCommentToBoulder.pending]: (state) => {
             state.status = "loading";
         },
         [addCommentToBoulder.fulfilled]: (state, action) => {
-            const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload._id ? action.payload : boulder);
-            state.boulders = editedBouldersList;
-            state.status = "success";
+            switch (action.payload.success) {
+                case true:
+                    const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload.boulder._id ? action.payload.boulder : boulder);
+                    state.boulders = editedBouldersList;
+                    state.status = "success";
+                    break;
+                case false:
+                    state.status = "failed";
+                default:
+                    state.status = null;
+                    break;
+            }
         },
-        [addCommentToBoulder.rejected]: (state, action) => {
+        [addCommentToBoulder.rejected]: (state) => {
             state.status = "failed";
         },
-        [deleteCommentFromBoulder.pending]: (state, action) => {
+        [deleteCommentFromBoulder.pending]: (state) => {
             state.status = "loading";
         },
         [deleteCommentFromBoulder.fulfilled]: (state, action) => {
-            const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload._id ? action.payload : boulder);
-            state.boulders = editedBouldersList;
-            state.status = "success";
+            console.log(action.payload)
+            switch (action.payload.success) {
+                case true:
+                    const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload.boulder._id ? action.payload.boulder : boulder);
+                    state.boulders = editedBouldersList;
+                    state.status = "success";
+                    break;
+                case false:
+                    state.status = "failed";
+                default:
+                    state.status = null;
+                    break;
+            }
         },
-        [deleteCommentFromBoulder.rejected]: (state, action) => {
+        [deleteCommentFromBoulder.rejected]: (state) => {
             state.status = "failed";
         },
-        [fetchOneBoulder.pending]: (state, action) => {
+        [fetchOneBoulder.pending]: (state) => {
             state.status = "loading";
         },
         [fetchOneBoulder.fulfilled]: (state, action) => {
             // if the action payload is already in state boulders, just return state
-            if (!state.boulders.find((boulder) => boulder._id === action.payload._id)) {
-                state.boulders = [...state.boulders, action.payload]
+            switch (action.payload.success) {
+                case true:
+                    if (!state.boulders.find((boulder) => boulder._id === action.payload.boulder._id)) {
+                        state.boulders = [...state.boulders, action.payload.boulder]
+                    }
+                    state.status = "success";
+                    break;
+                case false:
+                    state.status = "failed";
+                default:
+                    state.status = null;
+                    break;
             }
-            state.status = "success";
         },
         [fetchOneBoulder.rejected]: (state, action) => {
             state.status = "failed";
@@ -172,5 +245,5 @@ export const bouldersSlice = createSlice({
 })
 
 
-export const { clearFilter } = bouldersSlice.actions;
+export const { clearFilter, resetStatus } = bouldersSlice.actions;
 export default bouldersSlice.reducer;

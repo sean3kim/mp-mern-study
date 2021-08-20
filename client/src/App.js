@@ -11,6 +11,7 @@ import AddComment from "./components/AddComment";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import SecretPage from "./components/SecretPage";
+import ErrorPage from "./components/ErrorPage";
 import { BrowserRouter as Router, Route, Switch, Link, Redirect } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersSlice";
 import { checkLoggedIn } from "./features/users/usersSlice";
@@ -25,6 +26,7 @@ function App() {
   }, [])
 
   const loginStatus = useSelector((state) => state.users.isLoggedIn)
+  const stateStatus = useSelector((state) => state.boulders.status)
 
   return (
     <Router>
@@ -32,39 +34,45 @@ function App() {
         <Container>
           <NavBar />
           <h1>mountain project</h1>
-          <Switch>
-            <Route path="/new" >
-              {loginStatus ? <AddBoulder /> : <Redirect to="/login" />}
-            </Route>
-            <Route path="/" exact>
-              <HomePage />
-            </Route>
-            <Route path="/index" >
-              <ListBoulders />
-            </Route>
-            <Route path="/edit/:id">
-              {loginStatus ? <EditBoulder /> : <Redirect to="/login" />}
-            </Route>
-            <Route path="/show/:id/add_comment">
-              {loginStatus ? <AddComment /> : <Redirect to="/login" />}
-            </Route>
-            <Route path="/search">
-              <Searched />
-              <Link to={{ pathname: "/index", state: { fromSearch: true } }}>back to index</Link>
-            </Route>
-            <Route path="/show/:id">
-              <BoulderPage />
-            </Route>
-            <Route path="/login">
-              <LoginPage />
-            </Route>
-            <Route path="/register">
-              <RegisterPage />
-            </Route>
-            <Route path="/secret">
-              <SecretPage />
-            </Route>
-          </Switch>
+          {stateStatus === "failed" ? <ErrorPage /> :
+            <Switch>
+              <Route path="/new" >
+                {loginStatus ? <AddBoulder /> : <Redirect to="/login" />}
+              </Route>
+              <Route path="/" exact>
+                <HomePage />
+              </Route>
+              <Route path="/index" >
+                <ListBoulders />
+              </Route>
+              <Route path="/edit/:id">
+                {loginStatus ? <EditBoulder /> : <Redirect to="/login" />}
+              </Route>
+              <Route path="/show/:id/add_comment">
+                {loginStatus ? <AddComment /> : <Redirect to="/login" />}
+              </Route>
+              <Route path="/search">
+                <Searched />
+                <Link to={{ pathname: "/index", state: { fromSearch: true } }}>back to index</Link>
+              </Route>
+              <Route path="/show/:id">
+                <BoulderPage />
+                {/* {stateStatus === "failed" ?
+                  <ErrorPage /> :
+                  <BoulderPage />
+                } */}
+              </Route>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+              <Route path="/register">
+                <RegisterPage />
+              </Route>
+              <Route path="/secret">
+                <SecretPage />
+              </Route>
+            </Switch>
+          }
         </Container>
       </div>
     </Router >

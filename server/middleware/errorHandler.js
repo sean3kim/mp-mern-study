@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
     const status = error.status || 500;
     const message = error.message || "server error";
     console.log(message, status)
-    res.status(status).json({ success: false, message })
+    return res.status(status).json({ success: false, message })
 }
 
 module.exports = errorHandler;

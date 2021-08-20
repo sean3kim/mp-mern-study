@@ -13,7 +13,7 @@ const ListBoulders = () => {
 
     useEffect(() => {
         if (fromSearch) dispatch(clearFilter());
-    })
+    }, [allBoulders])
 
     return (
         <div>

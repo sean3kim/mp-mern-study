@@ -23,7 +23,7 @@ exports.addNewBoulder = async (req, res, next) => {
         const addBoulder = new Boulder(newBoulder);
         await addBoulder.save();
         const populatedBoulder = await Boulder.populate(addBoulder, "comments")
-        res.json(populatedBoulder);
+        res.json({ success: true, boulder: populatedBoulder });
     } catch (e) {
         next(e)
     }
@@ -37,7 +37,7 @@ exports.showBoulder = async (req, res, next) => {
         if (!foundBoulder) {
             return next(new ErrorResponse("could not find boulder", 404))
         }
-        res.json(foundBoulder);
+        res.json({ success: true, boulder: foundBoulder });
     } catch (e) {
         next(e);
     }
@@ -49,7 +49,7 @@ exports.deleteBoulderComment = async (req, res, next) => {
         const { commentId } = req.body;
         const editedBoulder = await Boulder.findByIdAndUpdate(boulderId, { $pull: { comments: commentId } }, { new: true }).populate("comments");
         await Comment.findByIdAndDelete(commentId);
-        res.json(editedBoulder);
+        res.json({ success: true, boulder: editedBoulder });
     } catch (e) {
         next(e);
     }
@@ -59,11 +59,15 @@ exports.deleteBoulderComment = async (req, res, next) => {
 exports.editBoulder = async (req, res, next) => {
     try {
         const boulder = { ...req.body };
+        if (!boulder.name || !boulder.grade || !boulder.location) {
+            return next(new ErrorResponse("please provide name, grade, and location", 400))
+        }
         const editedBoulder = await Boulder.findByIdAndUpdate(boulder._id, boulder, { new: true }).populate("comments");
+        console.log(editedBoulder);
         if (!editedBoulder) {
             return next(new ErrorResponse("could not find boulder", 404))
         }
-        res.json(editedBoulder);
+        res.json({ success: true, boulder: editedBoulder });
     } catch (e) {
         next(e);
     }
@@ -93,7 +97,7 @@ exports.addComment = async (req, res, next) => {
         await addComment.save();
         await boulderToAddComment.save();
         const populatedBoulder = await Boulder.populate(boulderToAddComment, "comments")
-        res.json(populatedBoulder);
+        res.json({ success: true, boulder: populatedBoulder });
     } catch (e) {
         next(e);
     }
