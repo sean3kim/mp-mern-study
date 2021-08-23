@@ -26,16 +26,16 @@ const BoulderPage = () => {
         const foundBoulder = state.boulders.boulders.find((b) => b._id === id)
         return foundBoulder;
     })
+    const currentUser = useSelector((state) => state.users.users)
 
     const handleDeleteComment = (commentId) => {
-        dispatch(deleteCommentFromBoulder({ boulderId: boulderFromStore._id, commentId }))
+        dispatch(deleteCommentFromBoulder({ boulderId: boulderFromStore._id, commentId, userId: currentUser._id }))
     }
 
     return (
         <div>
             <Paper elevation={6} className={classes.paper} >
 
-                {console.log(boulderFromStore)}
                 {boulderFromStore &&
                     <div>
                         <Typography variant="h3">

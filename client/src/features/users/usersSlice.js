@@ -6,8 +6,12 @@ const url = "http://localhost:5000";
 export const registerUser = createAsyncThunk(
     "users/register",
     async (user) => {
-        const { data } = await axios.post(`${url}/register`, user, { withCredentials: true })
-        return data;
+        try {
+            const { data } = await axios.post(`${url}/register`, user, { withCredentials: true })
+            return data;
+        } catch (error) {
+            return error.response.data;
+        }
     }
 )
 
@@ -16,6 +20,7 @@ export const loginUser = createAsyncThunk(
     async (user) => {
         try {
             const { data } = await axios.post(`${url}/login`, user, { withCredentials: true })
+            console.log(data)
             return data
         } catch (error) {
             return error.response.data;
@@ -53,9 +58,19 @@ export const userSlice = createSlice({
             state.status = "loading"
         },
         [registerUser.fulfilled]: (state, action) => {
-            state.users = action.payload;
-            state.isLoggedIn = true;
-            state.status = "success"
+            switch (action.payload.success) {
+                case true:
+                    state.users = { id: action.payload.user._id, username: action.payload.user.username };
+                    state.isLoggedIn = true;
+                    state.status = "success"
+                    break;
+                case false:
+                    state.isLoggedIn = false;
+                    state.status = "failed";
+                    break
+                default:
+                    break;
+            }
         },
         [registerUser.rejected]: (state, action) => {
             state.status = "failed"
@@ -66,23 +81,17 @@ export const userSlice = createSlice({
         [loginUser.fulfilled]: (state, action) => {
             switch (action.payload.success) {
                 case true:
-                    console.log("in true")
-                    state.users = action.payload.user;
+                    state.users = { id: action.payload.user._id, username: action.payload.user.username };
                     state.isLoggedIn = true;
                     state.status = "success"
                     break;
                 case false:
-                    console.log("in false")
                     state.isLoggedIn = false;
                     state.status = "failed";
                     break;
                 default:
-                    console.log("in default")
                     break;
             }
-            // state.users = action.payload.user;
-            // state.isLoggedIn = true;
-            // state.status = "success"
         },
         [loginUser.rejected]: (state, action) => {
             console.log("login reducer failed")
@@ -104,9 +113,18 @@ export const userSlice = createSlice({
             state.status = "loading"
         },
         [checkLoggedIn.fulfilled]: (state, action) => {
-            state.users = action.payload;
-            action.payload ? state.isLoggedIn = true : state.isLoggedIn = false;
-            state.status = "success"
+            if (!action.payload) {
+                state.isLoggedIn = false;
+                state.status = "failed";
+            } else {
+                state.users = { _id: action.payload._id, username: action.payload.username }
+                state.isLoggedIn = true;
+                state.status = "success";
+            }
+            // console.log("checkloggedIn: ", action.payload)
+            // state.users = action.payload;
+            // action.payload ? state.isLoggedIn = true : state.isLoggedIn = false;
+            // state.status = "success"
         },
         [checkLoggedIn.rejected]: (state, action) => {
             state.status = "failed"

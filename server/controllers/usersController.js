@@ -11,7 +11,7 @@ exports.register = async (req, res, next) => {
         const token = user.getSignedJWT();
         await user.save();
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge })
-        res.json(user)
+        res.json({ success: true, user })
     } catch (e) {
         next(e);
     }
@@ -33,7 +33,7 @@ exports.login = async (req, res, next) => {
             return next(new ErrorResponse("invalid credentials", 401));
         }
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge });
-        res.send({ success: true, user: req.user });
+        res.json({ success: true, user });
     } catch (e) {
         next(e);
     }

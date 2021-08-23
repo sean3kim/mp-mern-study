@@ -28,6 +28,7 @@ export const addBoulder = createAsyncThunk(
     async (boulder) => {
         try {
             const { data } = await axios.post(`${url}/new`, boulder, { withCredentials: true })
+            console.log(data)
             return data;
         } catch (error) {
             return error.response.data
@@ -37,9 +38,9 @@ export const addBoulder = createAsyncThunk(
 
 export const addCommentToBoulder = createAsyncThunk(
     "boulders/addComment",
-    async ({ comment, boulderId }) => {
+    async ({ comment, boulderId, userId }) => {
         try {
-            const { data } = await axios.put(`${url}/show/${boulderId}/add_comment`, comment);
+            const { data } = await axios.put(`${url}/show/${boulderId}/add_comment`, { comment, userId });
             return data;
         } catch (error) {
             return error.response.data
@@ -57,9 +58,9 @@ export const deleteBoulder = createAsyncThunk(
 
 export const deleteCommentFromBoulder = createAsyncThunk(
     "boulders/deleteComment",
-    async ({ boulderId, commentId }) => {
+    async ({ boulderId, commentId, userId }) => {
         try {
-            const { data } = await axios.delete(`${url}/show/${boulderId}`, { data: { commentId } });
+            const { data } = await axios.delete(`${url}/show/${boulderId}`, { data: { commentId, userId } });
             return data;
         } catch (error) {
             return error.response.data
@@ -108,7 +109,6 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [addBoulder.fulfilled]: (state, action) => {
-            console.log(action.payload)
             switch (action.payload.success) {
                 case true:
                     state.boulders = [...state.boulders, action.payload.boulder];
@@ -190,6 +190,7 @@ export const bouldersSlice = createSlice({
                     break;
                 case false:
                     state.status = "failed";
+                    break;
                 default:
                     state.status = null;
                     break;
@@ -211,6 +212,7 @@ export const bouldersSlice = createSlice({
                     break;
                 case false:
                     state.status = "failed";
+                    break;
                 default:
                     state.status = null;
                     break;
@@ -233,6 +235,7 @@ export const bouldersSlice = createSlice({
                     break;
                 case false:
                     state.status = "failed";
+                    break;
                 default:
                     state.status = null;
                     break;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCommentToBoulder } from "../features/boulders/bouldersSlice";
 import { useParams, useHistory } from "react-router-dom";
 
@@ -11,10 +11,12 @@ const AddComment = () => {
     const history = useHistory();
     const { id } = useParams();
 
+    const currentUser = useSelector((state) => state.users.users)
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(addCommentToBoulder({ comment: { title, body }, boulderId: id }))
-        console.log("id from form", id)
+        console.log(currentUser);
+        dispatch(addCommentToBoulder({ comment: { title, body }, boulderId: id, userId: currentUser._id }))
         history.push("/index");
     }
 

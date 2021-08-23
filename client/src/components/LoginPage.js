@@ -22,9 +22,6 @@ const LoginPage = () => {
         dispatch(loginUser({ username, password }));
         setUsername("");
         setPassword("");
-        // history.push("/index");
-        // if (loginStatus) history.push("/index");
-        // else history.push("/login");
     }
 
     return (

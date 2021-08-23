@@ -17,6 +17,7 @@ const AddBoulder = () => {
     const dispatch = useDispatch();
 
     const availableTags = useSelector((state) => state.boulders.availableTags)
+    const currentUser = useSelector((state) => state.users.users)
 
     const clearStates = () => {
         setName("")
@@ -44,7 +45,7 @@ const AddBoulder = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(addBoulder({ name, grade, location, description, tags }));
+        dispatch(addBoulder({ name, grade, location, description, tags, userId: currentUser._id }));
         clearStates();
         history.push("/index");
     }

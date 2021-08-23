@@ -1,5 +1,6 @@
 const Boulder = require("../models/boulderModel");
 const Comment = require("../models/commentModel");
+const User = require("../models/userModel");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 exports.getAllBoulders = async (req, res) => {
@@ -10,6 +11,12 @@ exports.getAllBoulders = async (req, res) => {
 exports.deleteBoulder = async (req, res, next) => {
     try {
         const { id } = req.body;
+        const foundBoulder = await Boulder.findById(id);
+        // deleting all the comments that the boulder had
+        await Comment.deleteMany({ _id: { $in: foundBoulder.comments } })
+        // deleting the boulder from the user document
+        await User.findByIdAndUpdate(foundBoulder.user, { $pull: { boulder: foundBoulder._id } })
+        // finally deleting the boulder itself
         await Boulder.findByIdAndDelete(id);
         res.send("deleted");
     } catch (e) {
@@ -19,12 +26,42 @@ exports.deleteBoulder = async (req, res, next) => {
 
 exports.addNewBoulder = async (req, res, next) => {
     try {
-        const newBoulder = { ...req.body };
+        const { name, grade, location, description, tags, userId } = req.body;
+        const foundUser = await User.findById(userId);
+        const newBoulder = { name, grade, location, description, tags, user: foundUser };
         const addBoulder = new Boulder(newBoulder);
+
+        // trying to add the boulder to the user without having to findbyidandupdate again
+        const foundUserAgain = await User.findByIdAndUpdate(userId, { $push: { boulder: addBoulder } }, { new: true })
+        if (!foundUserAgain) {
+            console.log("didnt find user");
+            return next(new ErrorResponse("please login", 401))
+        }
+
         await addBoulder.save();
-        const populatedBoulder = await Boulder.populate(addBoulder, "comments")
-        res.json({ success: true, boulder: populatedBoulder });
+        await foundUserAgain.save();
+        const populatedBoulder = await Boulder.populate(addBoulder, "comments");
+        const populatedUser = await User.populate(foundUserAgain, "boulders");
+        res.json({
+            success: true,
+            boulder: {
+                _id: populatedBoulder._id,
+                name: populatedBoulder.name,
+                grade: populatedBoulder.grade,
+                location: populatedBoulder.location,
+                description: populatedBoulder.description,
+                tags: populatedBoulder.tags,
+                userId: populatedBoulder.user._id,
+                username: populatedBoulder.user.username,
+            },
+            user: {
+                id: populatedUser._id,
+                username: populatedUser.username,
+                boulders: populatedUser.boulders
+            }
+        });
     } catch (e) {
+        console.log(e.message)
         next(e)
     }
 }
@@ -46,8 +83,12 @@ exports.showBoulder = async (req, res, next) => {
 exports.deleteBoulderComment = async (req, res, next) => {
     try {
         const { boulderId } = req.params;
-        const { commentId } = req.body;
+        const { commentId, userId } = req.body;
+        // delete comment from boulder and user
+        const editedUser = await User.findByIdAndUpdate(userId, { $pull: { comments: commentId } }, { new: true });
         const editedBoulder = await Boulder.findByIdAndUpdate(boulderId, { $pull: { comments: commentId } }, { new: true }).populate("comments");
+        await editedUser.save();
+        await editedBoulder.save();
         await Comment.findByIdAndDelete(commentId);
         res.json({ success: true, boulder: editedBoulder });
     } catch (e) {
@@ -82,7 +123,8 @@ exports.searchBoulders = async (req, res) => {
 exports.addComment = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { title, body } = req.body;
+        const { title, body } = req.body.comment;
+        const { userId } = req.body;
         if (!title || !body) {
             return next(new ErrorResponse("please provide title and comment body", 400))
         }
@@ -94,8 +136,11 @@ exports.addComment = async (req, res, next) => {
             return next(new ErrorResponse("could not find boulder", 404))
         }
 
+        // also need to add comment to user
+        const foundUser = await User.findByIdAndUpdate(userId, { $push: { comments: addComment } }, { new: true });
         await addComment.save();
         await boulderToAddComment.save();
+        await foundUser.save();
         const populatedBoulder = await Boulder.populate(boulderToAddComment, "comments")
         res.json({ success: true, boulder: populatedBoulder });
     } catch (e) {

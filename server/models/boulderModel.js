@@ -19,6 +19,7 @@ const BoulderSchema = new Schema({
         type: [String],
         enum: ["powerful", "endurance", "technical", "highball", "lowball", "crimpy", "slopey"]
     },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }]
 })
 
