@@ -4,7 +4,9 @@ const User = require("../models/userModel");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 exports.getAllBoulders = async (req, res) => {
-    const allBoulders = await Boulder.find().populate("comments");
+    const allBoulders = await Boulder.find()
+        .populate("comments")
+        .populate("user", ["_id", "username"]);
     res.json(allBoulders);
 }
 
@@ -40,25 +42,14 @@ exports.addNewBoulder = async (req, res, next) => {
 
         await addBoulder.save();
         await foundUserAgain.save();
-        const populatedBoulder = await Boulder.populate(addBoulder, "comments");
-        const populatedUser = await User.populate(foundUserAgain, "boulders");
+        const populatedBoulder = await Boulder.findById(addBoulder._id)
+            .populate("comments")
+            .populate("user", ["_id", "username"]);
+        // console.log(populatedBoulder);
+        // const populatedUser = await User.populate(foundUserAgain, "boulders");
         res.json({
             success: true,
-            boulder: {
-                _id: populatedBoulder._id,
-                name: populatedBoulder.name,
-                grade: populatedBoulder.grade,
-                location: populatedBoulder.location,
-                description: populatedBoulder.description,
-                tags: populatedBoulder.tags,
-                userId: populatedBoulder.user._id,
-                username: populatedBoulder.user.username,
-            },
-            user: {
-                id: populatedUser._id,
-                username: populatedUser.username,
-                boulders: populatedUser.boulders
-            }
+            boulder: populatedBoulder
         });
     } catch (e) {
         console.log(e.message)
@@ -70,7 +61,9 @@ exports.addNewBoulder = async (req, res, next) => {
 exports.showBoulder = async (req, res, next) => {
     try {
         const { boulderId } = req.params;
-        const foundBoulder = await Boulder.findById(boulderId).populate("comments");
+        const foundBoulder = await Boulder.findById(boulderId)
+            .populate("comments")
+            .populate("user", ["_id", "username", "boulders"]);
         if (!foundBoulder) {
             return next(new ErrorResponse("could not find boulder", 404))
         }
@@ -103,8 +96,10 @@ exports.editBoulder = async (req, res, next) => {
         if (!boulder.name || !boulder.grade || !boulder.location) {
             return next(new ErrorResponse("please provide name, grade, and location", 400))
         }
-        const editedBoulder = await Boulder.findByIdAndUpdate(boulder._id, boulder, { new: true }).populate("comments");
-        console.log(editedBoulder);
+        const editedBoulder = await Boulder.findByIdAndUpdate(boulder._id, boulder, { new: true })
+            .populate("comments")
+            .populate("user", ["_id", "username"]);
+        // console.log(editedBoulder);
         if (!editedBoulder) {
             return next(new ErrorResponse("could not find boulder", 404))
         }
@@ -116,7 +111,9 @@ exports.editBoulder = async (req, res, next) => {
 
 exports.searchBoulders = async (req, res) => {
     const searchName = req.query.s;
-    const foundBoulders = await Boulder.find({ name: { $regex: searchName } }).populate("comments");
+    const foundBoulders = await Boulder.find({ name: { $regex: searchName } })
+        .populate("comments")
+        .populate("user", ["_id", "username"]);
     res.json(foundBoulders);
 }
 
@@ -141,7 +138,9 @@ exports.addComment = async (req, res, next) => {
         await addComment.save();
         await boulderToAddComment.save();
         await foundUser.save();
-        const populatedBoulder = await Boulder.populate(boulderToAddComment, "comments")
+        const populatedBoulder = await Boulder.findById(boulderToAddComment._id)
+            .populate("comments")
+            .populate("user", ["_id", "username"])
         res.json({ success: true, boulder: populatedBoulder });
     } catch (e) {
         next(e);

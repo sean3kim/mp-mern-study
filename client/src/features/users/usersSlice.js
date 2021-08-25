@@ -60,7 +60,7 @@ export const userSlice = createSlice({
         [registerUser.fulfilled]: (state, action) => {
             switch (action.payload.success) {
                 case true:
-                    state.users = { id: action.payload.user._id, username: action.payload.user.username };
+                    state.users = { _id: action.payload.user._id, username: action.payload.user.username };
                     state.isLoggedIn = true;
                     state.status = "success"
                     break;
@@ -81,7 +81,7 @@ export const userSlice = createSlice({
         [loginUser.fulfilled]: (state, action) => {
             switch (action.payload.success) {
                 case true:
-                    state.users = { id: action.payload.user._id, username: action.payload.user.username };
+                    state.users = { _id: action.payload.user._id, username: action.payload.user.username };
                     state.isLoggedIn = true;
                     state.status = "success"
                     break;

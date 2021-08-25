@@ -38,12 +38,14 @@ const BoulderPage = () => {
 
                 {boulderFromStore &&
                     <div>
+                        {/* {console.log("boulderFromStore: ", boulderFromStore)} */}
                         <Typography variant="h3">
                             {boulderFromStore.name}
                         </Typography>
                         <Typography>{boulderFromStore.tags.join(" ")}</Typography>
                         <Box mb={2}>
                             <Typography variant="h6">v{boulderFromStore.grade}</Typography>
+                            <Typography variant="body1">submitted by: {boulderFromStore.user.username}</Typography>
                         </Box>
                         <Typography variant="h5">description</Typography>
                         <Typography variant="body1">{boulderFromStore.description}</Typography>

@@ -16,6 +16,7 @@ export const fetchOneBoulder = createAsyncThunk(
     async (id) => {
         try {
             const { data } = await axios.get(`${url}/show/${id}`, { withCredentials: true })
+            console.log(data);
             return data;
         } catch (error) {
             return error.response.data;
@@ -28,7 +29,6 @@ export const addBoulder = createAsyncThunk(
     async (boulder) => {
         try {
             const { data } = await axios.post(`${url}/new`, boulder, { withCredentials: true })
-            console.log(data)
             return data;
         } catch (error) {
             return error.response.data
@@ -225,6 +225,7 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [fetchOneBoulder.fulfilled]: (state, action) => {
+            console.log(action.payload)
             // if the action payload is already in state boulders, just return state
             switch (action.payload.success) {
                 case true:
