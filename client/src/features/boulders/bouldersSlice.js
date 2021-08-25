@@ -16,7 +16,6 @@ export const fetchOneBoulder = createAsyncThunk(
     async (id) => {
         try {
             const { data } = await axios.get(`${url}/show/${id}`, { withCredentials: true })
-            console.log(data);
             return data;
         } catch (error) {
             return error.response.data;
@@ -41,6 +40,7 @@ export const addCommentToBoulder = createAsyncThunk(
     async ({ comment, boulderId, userId }) => {
         try {
             const { data } = await axios.put(`${url}/show/${boulderId}/add_comment`, { comment, userId });
+            console.log("data", data)
             return data;
         } catch (error) {
             return error.response.data
@@ -150,7 +150,6 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [editBoulder.fulfilled]: (state, action) => {
-            console.log(action.payload)
             switch (action.payload.success) {
                 case true:
                     const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload.boulder._id ? action.payload.boulder : boulder);
@@ -203,7 +202,6 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [deleteCommentFromBoulder.fulfilled]: (state, action) => {
-            console.log(action.payload)
             switch (action.payload.success) {
                 case true:
                     const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload.boulder._id ? action.payload.boulder : boulder);
@@ -225,7 +223,6 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [fetchOneBoulder.fulfilled]: (state, action) => {
-            console.log(action.payload)
             // if the action payload is already in state boulders, just return state
             switch (action.payload.success) {
                 case true:

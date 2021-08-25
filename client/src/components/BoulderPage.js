@@ -38,7 +38,6 @@ const BoulderPage = () => {
 
                 {boulderFromStore &&
                     <div>
-                        {/* {console.log("boulderFromStore: ", boulderFromStore)} */}
                         <Typography variant="h3">
                             {boulderFromStore.name}
                         </Typography>
