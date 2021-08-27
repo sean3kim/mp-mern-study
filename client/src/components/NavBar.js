@@ -28,24 +28,12 @@ const useStyles = makeStyles((theme) => ({
             textDecoration: "none"
         }
     },
-    loginLink: {
+    userLinkTexts: {
         paddingLeft: "10px",
-        "&:hover": {
-            color: "#A9E190",
-            textDecoration: "none"
-        }
     },
-    registerLink: {
-        paddingLeft: "10px",
+    userLinks: {
         "&:hover": {
-            color: "#A9E190",
-            textDecoration: "none"
-        }
-    },
-    logoutLink: {
-        paddingLeft: "10px",
-        "&:hover": {
-            color: "#A9E190",
+            color: theme.palette.primary.main,
             textDecoration: "none"
         }
     }
@@ -78,13 +66,19 @@ const NavBar = () => {
                     {!isLoggedIn ?
                         <div>
                             <div>
-                                <Link href="/login" className={classes.loginLink} color="inherit">login</Link>
+                                <Typography className={classes.userLinkTexts}>
+                                    <Link href="/login" className={classes.userLinks} color="inherit">login</Link>
+                                </Typography>
                             </div>
                             <div>
-                                <Link href="/register" className={classes.registerLink} color="inherit">register</Link>
+                                <Typography className={classes.userLinkTexts}>
+                                    <Link href="/register" className={classes.userLinks} color="inherit">register</Link>
+                                </Typography>
                             </div>
                         </div> :
-                        <Link href="" className={classes.logoutLink} color="inherit" onClick={handleLogout}>logout</Link>
+                        <Typography className={classes.userLinkTexts}>
+                            <Link href="" className={classes.userLinks} color="inherit" onClick={handleLogout}>logout</Link>
+                        </Typography>
                     }
                 </Toolbar>
             </AppBar>

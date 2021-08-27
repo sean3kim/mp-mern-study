@@ -8,7 +8,8 @@ import { deleteCommentFromBoulder, fetchOneBoulder } from "../features/boulders/
 
 const useStyles = makeStyles({
     paper: {
-        padding: "20px"
+        padding: "20px",
+        margin: "40px"
     }
 })
 
