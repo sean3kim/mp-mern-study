@@ -28,6 +28,9 @@ const theme = createTheme({
     },
     warning: {
       main: "#FCFF6C",
+    },
+    info: {
+      main: "#2B50AA"
     }
   },
   typography: {
@@ -55,7 +58,7 @@ function App() {
             {stateStatus === "failed" ? <ErrorPage /> :
               <Switch>
                 <Route path="/new" >
-                  {loginStatus ? <AddBoulder /> : <Redirect to="/login" />}
+                  {loginStatus ? <AddBoulder /> : <Redirect to={{ pathname: "/login", state: { from: "/new" } }} />}
                 </Route>
                 <Route path="/" exact>
                   <HomePage />
@@ -64,10 +67,10 @@ function App() {
                   <ListBoulders />
                 </Route>
                 <Route path="/edit/:id">
-                  {loginStatus ? <EditBoulder /> : <Redirect to="/login" />}
+                  {loginStatus ? <EditBoulder /> : <Redirect to={{ pathname: "/login", state: { from: "editBoulder" } }} />}
                 </Route>
                 <Route path="/show/:id/add_comment">
-                  {loginStatus ? <AddComment /> : <Redirect to="/login" />}
+                  {loginStatus ? <AddComment /> : <Redirect to={{ pathname: "/login", state: { from: "addComment" } }} />}
                 </Route>
                 <Route path="/search">
                   <Searched />

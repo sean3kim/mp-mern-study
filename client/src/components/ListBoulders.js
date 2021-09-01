@@ -3,9 +3,9 @@ import Boulder from "./Boulder"
 import { Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearFilter } from "../features/boulders/bouldersSlice";
-import { Container, makeStyles, Typography, Paper } from "@material-ui/core";
+import { Container, makeStyles, Typography, Paper, Button } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: "30px"
     },
@@ -14,8 +14,16 @@ const useStyles = makeStyles({
     },
     header: {
         marginBottom: "20px"
+    },
+    links: {
+        textDecoration: "none",
+    },
+    newBoulder: {
+        backgroundColor: theme.palette.warning.main,
+        textTransform: "none",
+        marginTop: "5px"
     }
-})
+}))
 
 const ListBoulders = () => {
     const dispatch = useDispatch();
@@ -41,7 +49,15 @@ const ListBoulders = () => {
                     />
                 ))}
                 <Typography>
-                    <Link to="/new">add a new boulder</Link>
+                    <Link to="/new" className={classes.links}>
+                        <Button
+                            className={classes.newBoulder}
+                            variant="contained"
+                            size="small"
+                        >
+                            add a new boulder
+                        </Button>
+                    </Link>
                 </Typography>
             </Paper>
         </Container>

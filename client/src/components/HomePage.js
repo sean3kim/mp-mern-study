@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "100vh",
+        boxSizing: "border-box",
+        minHeight: "calc(100vh - 64px)",
     },
     allBouldersButton: {
         backgroundColor: theme.palette.warning.main,
