@@ -41,11 +41,12 @@ const LoginPage = () => {
     const loginStatus = useSelector((state) => state.users.isLoggedIn);
 
     useEffect(() => {
-        console.log("match", match)
-        console.log("location state: ", location.state)
-        console.log("useref: ", test.current)
-        if (loginStatus && test.current) history.push(test.current);
-        else if (loginStatus && !test.current) history.push("/index");
+        // console.log("match", match)
+        // console.log("location state: ", location.state)
+        // console.log("useref: ", test.current)
+        // if (loginStatus && test.current) history.push(test.current);
+        if (loginStatus) history.push("/index")
+        // else if (loginStatus && !test.current) history.push("/index");
         else history.push("/login");
     }, [loginStatus])
 

@@ -2,6 +2,31 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { addCommentToBoulder } from "../features/boulders/bouldersSlice";
 import { useParams, useHistory } from "react-router-dom";
+import { Button, Card, CardHeader, CardContent, TextField, Container, Typography, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        boxSizing: "border-box",
+        minHeight: "calc(100vh - 64px)",
+        width: "50%",
+        padding: "100px"
+    },
+    card: {
+        width: "100%"
+    },
+    cardHeader: {
+        textAlign: "center",
+        paddingBottom: "0px"
+    },
+    button: {
+        backgroundColor: theme.palette.warning.main,
+        textTransform: "none"
+    }
+}))
 
 const AddComment = () => {
     const [title, setTitle] = useState("");
@@ -9,6 +34,7 @@ const AddComment = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const classes = useStyles();
     const { id } = useParams();
 
     const currentUser = useSelector((state) => state.users.users)
@@ -21,33 +47,48 @@ const AddComment = () => {
     }
 
     return (
-        <div>
-            add a new comment here
-
-
-            <form action="" onSubmit={handleSubmit}>
-                <label htmlFor="">comment title</label>
-                <input type="text"
-                    placeholder="comment title..."
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)} />
-
-                <div>
-                    <textarea
-                        name="commentBody"
-                        id="commentBody"
-                        cols="30"
-                        rows="10"
-                        placeholder="add a comment"
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                    >
-                        add a comment
-                    </textarea>
-                </div>
-                <button>submit</button>
-            </form>
-        </div>
+        <Container className={classes.root}>
+            <Card className={classes.card}>
+                <CardHeader
+                    className={classes.cardHeader}
+                    title="add a new comment"
+                />
+                <CardContent>
+                    <form action="" onSubmit={handleSubmit}>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            label="comment title"
+                            margin="normal"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                        <div>
+                            <TextField
+                                label="comment body"
+                                variant="outlined"
+                                fullWidth
+                                multiline
+                                margin="normal"
+                                minRows="10"
+                                id="commentBody"
+                                name="commentBody"
+                                value={body}
+                                onChange={(e) => setBody(e.target.value)}
+                            />
+                        </div>
+                        <Button
+                            className={classes.button}
+                            variant="contained"
+                            fullWidth
+                            type="submit"
+                        >
+                            submit
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
+        </Container>
     )
 }
 

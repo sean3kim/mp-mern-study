@@ -1,21 +1,46 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { Paper, Typography, Box } from "@material-ui/core";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { Paper, Typography, Button, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import Comment from "./Comment";
 import { deleteCommentFromBoulder, fetchOneBoulder } from "../features/boulders/bouldersSlice";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     paper: {
         padding: "20px",
         margin: "40px"
+    },
+    addCommentButton: {
+        textTransform: "none",
+        backgroundColor: theme.palette.warning.main,
+        marginTop: "20px"
+    },
+    addCommentLink: {
+        textDecoration: "none",
+        color: "black"
+    },
+    editButton: {
+        textTransform: "none",
+    },
+    editLink: {
+        textDecoration: "none",
+        color: "white"
+    },
+    spacing: {
+        margin: "30px 0px"
+    },
+    index: {
+        color: theme.palette.info.main,
+        textDecoration: "none",
+        fontFamily: theme.typography.fontFamily
     }
-})
+}))
 
 
 const BoulderPage = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const { id } = useParams();
     const classes = useStyles();
 
@@ -30,7 +55,15 @@ const BoulderPage = () => {
     const currentUser = useSelector((state) => state.users.users)
 
     const handleDeleteComment = (commentId) => {
-        dispatch(deleteCommentFromBoulder({ boulderId: boulderFromStore._id, commentId, userId: currentUser._id }))
+        if (currentUser) {
+            dispatch(deleteCommentFromBoulder({
+                boulderId: boulderFromStore._id,
+                commentId,
+                userId: currentUser._id
+            }))
+        } else {
+            history.push("/login");
+        }
     }
 
     return (
@@ -50,8 +83,7 @@ const BoulderPage = () => {
                         <Typography variant="h5">description</Typography>
                         <Typography variant="body1">{boulderFromStore.description}</Typography>
 
-                        <Typography variant="h5" >comments</Typography>
-                        <Link to={`/show/${boulderFromStore._id}/add_comment`}>add a comment</Link>
+                        <Typography className={classes.spacing} variant="h5" >comments</Typography>
 
                         <div>
                             {boulderFromStore.comments.map((comment) => (
@@ -62,12 +94,17 @@ const BoulderPage = () => {
                                 />
                             ))}
                         </div>
-                        <div>
-                            <Link to={{ pathname: `/edit/${boulderFromStore._id}`, state: { boulder: boulderFromStore } }}>edit</Link>
+                        <Button className={classes.addCommentButton} variant="contained" size="small">
+                            <Link className={classes.addCommentLink} to={`/show/${boulderFromStore._id}/add_comment`}>add a comment</Link>
+                        </Button>
+                        <div className={classes.spacing}>
+                            <Button className={classes.editButton} variant="contained" size="small" color="primary">
+                                <Link className={classes.editLink} to={{ pathname: `/edit/${boulderFromStore._id}`, state: { boulder: boulderFromStore } }}>edit</Link>
+                            </Button>
                         </div>
                     </div>
                 }
-                <Link to="/index">back to index page</Link>
+                <Link className={classes.index} to="/index">back to index page</Link>
             </Paper>
         </div >
     )

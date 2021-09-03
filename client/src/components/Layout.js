@@ -4,7 +4,9 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.primary.main,
-        minHeight: "100vh"
+        minHeight: "100vh",
+        // minHeight: "calc(100vh - 64px)",
+        marginBottom: "0px"
     }
 }))
 
