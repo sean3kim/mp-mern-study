@@ -74,7 +74,6 @@ function App() {
                 </Route>
                 <Route path="/search">
                   <Searched />
-                  <Link to={{ pathname: "/index", state: { fromSearch: true } }}>back to index</Link>
                 </Route>
                 <Route path="/show/:id">
                   <BoulderPage />

@@ -5,6 +5,8 @@ import { Paper, Typography, Button, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import Comment from "./Comment";
 import { deleteCommentFromBoulder, fetchOneBoulder } from "../features/boulders/bouldersSlice";
+import DeleteIcon from '@material-ui/icons/Delete';
+import { deleteBoulder } from "../features/boulders/bouldersSlice";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -34,7 +36,15 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.info.main,
         textDecoration: "none",
         fontFamily: theme.typography.fontFamily
-    }
+    },
+    indexSpacing: {
+        marginTop: "30px"
+    },
+    deleteButton: {
+        textTransform: "none",
+        marginLeft: "5px",
+        marginRight: "5px"
+    },
 }))
 
 
@@ -97,15 +107,27 @@ const BoulderPage = () => {
                         <Button className={classes.addCommentButton} variant="contained" size="small">
                             <Link className={classes.addCommentLink} to={`/show/${boulderFromStore._id}/add_comment`}>add a comment</Link>
                         </Button>
-                        <div className={classes.spacing}>
-                            <Button className={classes.editButton} variant="contained" size="small" color="primary">
-                                {console.log(boulderFromStore)}
-                                <Link className={classes.editLink} to={{ pathname: `/edit/${boulderFromStore._id}`, state: { boulder: boulderFromStore } }}>edit</Link>
-                            </Button>
-                        </div>
+                        {(currentUser && currentUser._id === boulderFromStore.user._id) &&
+                            <div className={classes.spacing}>
+                                <Button className={classes.editButton} variant="contained" size="small" color="primary">
+                                    <Link className={classes.editLink} to={{ pathname: `/edit/${boulderFromStore._id}`, state: { boulder: boulderFromStore } }}>edit</Link>
+                                </Button>
+                                <Button
+                                    className={classes.deleteButton}
+                                    startIcon={<DeleteIcon />}
+                                    color="secondary"
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() => dispatch(deleteBoulder(boulderFromStore._id))}>
+                                    delete
+                                </Button>
+                            </div>
+                        }
                     </div>
                 }
-                <Link className={classes.index} to="/index">back to index page</Link>
+                <Typography className={classes.indexSpacing}>
+                    <Link className={classes.index} to="/index">back to index page</Link>
+                </Typography>
             </Paper>
         </div >
     )

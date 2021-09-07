@@ -29,7 +29,7 @@ const Boulder = ({ boulder }) => {
                     {boulder.name}
                 </Link>
                 <span> in {boulder.location} - v{boulder.grade} </span>
-                <Button
+                {/* <Button
                     className={classes.deleteButton}
                     startIcon={<DeleteIcon />}
                     color="secondary"
@@ -37,7 +37,7 @@ const Boulder = ({ boulder }) => {
                     size="small"
                     onClick={() => dispatch(deleteBoulder(boulder._id))}>
                     delete
-                </Button>
+                </Button> */}
             </Typography>
 
         </div >
