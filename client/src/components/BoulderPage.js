@@ -118,7 +118,10 @@ const BoulderPage = () => {
                                     color="secondary"
                                     variant="contained"
                                     size="small"
-                                    onClick={() => dispatch(deleteBoulder(boulderFromStore._id))}>
+                                    onClick={() => {
+                                        dispatch(deleteBoulder(boulderFromStore._id))
+                                        history.push("/index")
+                                    }}>
                                     delete
                                 </Button>
                             </div>

@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         backgroundColor: theme.palette.warning.main,
-        marginBottom: "10px"
+        marginBottom: "10px",
+        textTransform: "none"
     },
     indexLink: {
         color: theme.palette.info.main,

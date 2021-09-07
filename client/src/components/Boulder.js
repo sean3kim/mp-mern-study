@@ -29,15 +29,6 @@ const Boulder = ({ boulder }) => {
                     {boulder.name}
                 </Link>
                 <span> in {boulder.location} - v{boulder.grade} </span>
-                {/* <Button
-                    className={classes.deleteButton}
-                    startIcon={<DeleteIcon />}
-                    color="secondary"
-                    variant="contained"
-                    size="small"
-                    onClick={() => dispatch(deleteBoulder(boulder._id))}>
-                    delete
-                </Button> */}
             </Typography>
 
         </div >
