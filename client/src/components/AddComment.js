@@ -60,6 +60,8 @@ const AddComment = () => {
                             variant="outlined"
                             label="comment title"
                             margin="normal"
+                            id="commentTitle"
+                            name="commentTitle"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />

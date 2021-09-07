@@ -72,6 +72,7 @@ export const editBoulder = createAsyncThunk(
     "boulders/edit",
     async (boulder) => {
         try {
+            console.log("in slice: ", boulder)
             await axios.put(`${url}/edit/${boulder._id}`, boulder, { withCredentials: true });
             return { success: true, boulder };
         } catch (error) {

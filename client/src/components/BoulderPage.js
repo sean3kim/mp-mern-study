@@ -99,6 +99,7 @@ const BoulderPage = () => {
                         </Button>
                         <div className={classes.spacing}>
                             <Button className={classes.editButton} variant="contained" size="small" color="primary">
+                                {console.log(boulderFromStore)}
                                 <Link className={classes.editLink} to={{ pathname: `/edit/${boulderFromStore._id}`, state: { boulder: boulderFromStore } }}>edit</Link>
                             </Button>
                         </div>

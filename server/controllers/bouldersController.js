@@ -34,12 +34,13 @@ exports.addNewBoulder = async (req, res, next) => {
         const addBoulder = new Boulder(newBoulder);
 
         // trying to add the boulder to the user without having to findbyidandupdate again
-        foundUser.boulder.push(addBoulder);
         if (!foundUser) {
             console.log("didnt find user");
             return next(new ErrorResponse("please login", 401));
         }
+        foundUser.boulder.push(addBoulder);
         await addBoulder.save();
+        await foundUser.save();
         // await foundUserAgain.save();
         const populatedBoulder = await Boulder.findById(addBoulder._id)
             .populate({ path: "comments", populate: { path: "author", select: "username" } })
@@ -88,6 +89,7 @@ exports.deleteBoulderComment = async (req, res, next) => {
 
 exports.editBoulder = async (req, res, next) => {
     try {
+        // need to find the user and add boulder? yes/no? i don't think so bc id is the same and that is all that is stored
         const boulder = { ...req.body };
         if (!boulder.name || !boulder.grade || !boulder.location) {
             return next(new ErrorResponse("please provide name, grade, and location", 400))
