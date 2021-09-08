@@ -13,9 +13,11 @@ import RegisterPage from "./components/RegisterPage";
 import SecretPage from "./components/SecretPage";
 import ErrorPage from "./components/ErrorPage";
 import Layout from "./components/Layout";
-import { BrowserRouter as Router, Route, Switch, Link, Redirect } from "react-router-dom";
+import Areas from "./components/Areas";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersSlice";
 import { checkLoggedIn } from "./features/users/usersSlice";
+import { fetchAreas } from "./features/areas/areasSlice";
 import { createTheme, ThemeProvider } from "@material-ui/core";
 
 const theme = createTheme({
@@ -43,6 +45,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchBoulders());
+    dispatch(fetchAreas());
     dispatch(checkLoggedIn());
   }, [])
 
@@ -83,6 +86,9 @@ function App() {
                 </Route>
                 <Route path="/register">
                   <RegisterPage />
+                </Route>
+                <Route path="/areas">
+                  <Areas />
                 </Route>
                 <Route path="/secret">
                   <SecretPage />

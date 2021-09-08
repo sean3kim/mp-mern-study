@@ -6,6 +6,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")
 const boulderRoutes = require("./routes/boulderRoutes");
 const userRoutes = require("./routes/userRoutes");
+const areaRoutes = require("./routes/areaRoutes");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/errorHandler.js");
 
@@ -49,6 +50,7 @@ app.use(session(sessionConfig))
 
 app.use("/", boulderRoutes);
 app.use("/", userRoutes);
+app.use("/areas", areaRoutes);
 
 app.use(errorHandler);
 
