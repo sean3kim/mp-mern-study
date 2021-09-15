@@ -13,10 +13,13 @@ const useStyles = makeStyles((theme) => ({
     },
     allBouldersButton: {
         backgroundColor: theme.palette.warning.main,
-        textTransform: "none"
+        textTransform: "none",
     },
     indexLink: {
-        textDecoration: "none"
+        textDecoration: "none",
+    },
+    spacing: {
+        marginTop: "10px"
     }
 }))
 
@@ -32,6 +35,13 @@ const HomePage = () => {
                         to all boulders
                     </Button>
                 </Link>
+                <div className={classes.spacing}>
+                    <Link to="/areas" className={classes.indexLink}>
+                        <Button variant="contained" className={classes.allBouldersButton}>
+                            to all areas
+                        </Button>
+                    </Link>
+                </div>
 
             </Container>
         </div>

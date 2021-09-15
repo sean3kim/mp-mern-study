@@ -2,13 +2,22 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    getAreas
+    getAreas,
+    getOneArea,
+    addArea,
+    deleteArea
 } = require("../controllers/areasController");
 
 
 router.route("/")
     .get(getAreas)
+    .delete(deleteArea)
 
+router.route("/show/:areaId")
+    .get(getOneArea)
+
+router.route("/new")
+    .post(addArea)
 
 // router.route("/")
 //     .get(getAllBoulders)

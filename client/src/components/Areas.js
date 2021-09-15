@@ -1,23 +1,24 @@
 import React from 'react';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAreas } from '../features/areas/areasSlice';
+import { Link } from "react-router-dom";
 
 const Areas = () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const allAreas = useSelector((state) => state.areas.areas);
 
-    useEffect(() => {
-    }, [])
+    // useEffect(() => {
+    // }, [])
 
     return (
         <div>
-            {console.log("all areas", allAreas)}
+            {/* {console.log("all areas", allAreas)} */}
             {allAreas.map((area, index) =>
                 <div key={index}>
-                    {area.name}
+                    <Link to={`/areas/show/${area._id}`}>{area.name}</Link>
                 </div>
             )}
+            <Link to="/areas/new">add an area</Link>
         </div>
     )
 }

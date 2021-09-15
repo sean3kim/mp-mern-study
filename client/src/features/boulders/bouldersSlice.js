@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { deleteArea } from "../areas/areasSlice";
 
 const url = "http://localhost:5000";
 
@@ -241,6 +242,34 @@ export const bouldersSlice = createSlice({
             }
         },
         [fetchOneBoulder.rejected]: (state, action) => {
+            state.status = "failed";
+        },
+        [deleteArea.pending]: (state, action) => {
+            state.status = "loading";
+        },
+        [deleteArea.fulfilled]: (state, action) => {
+            // NEED TO TEST THIS ONE
+            console.log("boulders extra reducer", action.payload.descendents)
+            const { descendents } = action.payload;
+            const parentArea = action.payload.area;
+
+            let allBoulders;
+            if (descendents.length > 0) {
+                // grab all the boulders from the descendents
+                // filter them from the state boulders array
+                const descBoulders = descendents.map((d) => d.boulders).flat();
+                allBoulders = descBoulders.concat(parentArea.boulders).flat();
+            } else {
+                allBoulders = parentArea.boulders;
+            }
+
+            const newState = state.boulders.filter((boulder) => !allBoulders.includes(boulder))
+            state.boulders = newState;
+
+
+            state.status = "success";
+        },
+        [deleteArea.rejected]: (state, action) => {
             state.status = "failed";
         },
     }
