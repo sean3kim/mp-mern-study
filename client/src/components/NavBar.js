@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import Search from "./Search";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutUser } from "../features/users/usersSlice";
+import { logoutUser } from "../features/users/usersThunks";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({

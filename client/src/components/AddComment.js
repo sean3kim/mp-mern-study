@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { addCommentToBoulder } from "../features/boulders/bouldersSlice";
+import { addCommentToBoulder } from "../features/boulders/bouldersThunks";
 import { useParams, useHistory } from "react-router-dom";
 import { Button, Card, CardHeader, CardContent, TextField, Container, Typography, makeStyles } from '@material-ui/core';
 

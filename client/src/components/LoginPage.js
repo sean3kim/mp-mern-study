@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { loginUser } from "../features/users/usersSlice";
+import { loginUser } from "../features/users/usersThunks";
 import { makeStyles, Card, CardHeader, CardContent, Container, TextField, Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({

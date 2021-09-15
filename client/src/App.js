@@ -17,9 +17,9 @@ import Areas from "./components/Areas";
 import AddArea from "./components/AddArea";
 import AreaPage from "./components/AreaPage";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-import { fetchBoulders } from "./features/boulders/bouldersSlice";
-import { checkLoggedIn } from "./features/users/usersSlice";
-import { fetchAreas } from "./features/areas/areasSlice";
+import { fetchBoulders } from "./features/boulders/bouldersThunks";
+import { checkLoggedIn } from "./features/users/usersThunks";
+import { fetchAreas } from "./features/areas/areasThunks";
 import { createTheme, ThemeProvider } from "@material-ui/core";
 
 const theme = createTheme({

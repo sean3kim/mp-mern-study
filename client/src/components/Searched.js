@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, Link } from "react-router-dom";
-import { searchBoulderName } from "../features/boulders/bouldersSlice";
+import { searchBoulderName } from "../features/boulders/bouldersThunks";
 import { makeStyles, Container, Paper, Typography } from "@material-ui/core";
 import Boulder from "./Boulder";
 

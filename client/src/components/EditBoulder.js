@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory, useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { editBoulder } from "../features/boulders/bouldersSlice";
+import { editBoulder } from "../features/boulders/bouldersThunks";
 import { makeStyles, Paper, Container, TextField, Checkbox, FormControl, FormControlLabel, FormLabel, Button, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from "react-redux";
-import { registerUser } from "../features/users/usersSlice";
+import { registerUser } from "../features/users/usersThunks";
 import { useHistory } from "react-router-dom";
 import { makeStyles, Card, CardHeader, CardContent, Container, TextField, Button } from "@material-ui/core";
 

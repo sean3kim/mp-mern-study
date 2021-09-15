@@ -4,9 +4,9 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { Paper, Typography, Button, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import Comment from "./Comment";
-import { deleteCommentFromBoulder, fetchOneBoulder } from "../features/boulders/bouldersSlice";
+import { deleteCommentFromBoulder, fetchOneBoulder } from "../features/boulders/bouldersThunks";
 import DeleteIcon from '@material-ui/icons/Delete';
-import { deleteBoulder } from "../features/boulders/bouldersSlice";
+import { deleteBoulder } from "../features/boulders/bouldersThunks";
 
 const useStyles = makeStyles((theme) => ({
     paper: {

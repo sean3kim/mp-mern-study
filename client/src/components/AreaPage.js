@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useHistory } from "react-router-dom";
-import { fetchOneArea, deleteArea } from "../features/areas/areasSlice";
+import { fetchOneArea, deleteArea } from "../features/areas/areasThunks";
 import { makeStyles, Paper, Typography, Button } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 
