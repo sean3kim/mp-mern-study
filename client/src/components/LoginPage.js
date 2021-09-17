@@ -33,7 +33,7 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
-    const from = location.state && location.state.from;
+    // const from = location.state && location.state.from;
     // const test = useRef(from)
     // const match = useRouteMatch();
     const classes = useStyles();

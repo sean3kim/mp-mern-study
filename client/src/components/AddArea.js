@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom"
-import { makeStyles, Container, Paper, TextField, Button, Typography } from "@material-ui/core";
+import { Container, Paper, TextField, Button, Typography } from "@material-ui/core";
 import { addArea } from "../features/areas/areasThunks";
 
 const AddArea = () => {

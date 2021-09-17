@@ -80,7 +80,7 @@ exports.deleteBoulderComment = async (req, res, next) => {
         const editedBoulder = await Boulder.findByIdAndUpdate(boulderId, { $pull: { comments: commentId } }, { new: true })
             .populate({ path: "comments", populate: { path: "author", select: "username" } })
         await Comment.findByIdAndDelete(commentId);
-        res.json({ success: true, boulder: editedBoulder });
+        res.json({ success: true, boulder: editedBoulder, commentId });
     } catch (e) {
         next(e);
     }
@@ -142,7 +142,7 @@ exports.addComment = async (req, res, next) => {
         const populatedBoulder = await Boulder.findById(boulderToAddComment._id)
             .populate({ path: "comments", populate: { path: "author", select: "username" } })
             .populate("user", ["_id", "username"])
-        res.json({ success: true, boulder: populatedBoulder });
+        res.json({ success: true, boulder: populatedBoulder, commentId: addComment._id });
     } catch (e) {
         next(e);
     }

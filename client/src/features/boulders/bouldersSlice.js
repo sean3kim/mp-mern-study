@@ -10,6 +10,7 @@ import {
     editBoulder,
     searchBoulderName
 } from "./bouldersThunks";
+import { addComment, deleteComment } from "../comments/commentsThunks";
 
 
 export const bouldersSlice = createSlice({
@@ -53,7 +54,15 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [fetchBoulders.fulfilled]: (state, action) => {
-            state.boulders = action.payload;
+            const newState = action.payload.map((boulder) => {
+                let commentIds = [];
+                boulder.comments.forEach((comment) => {
+                    commentIds.push(comment._id)
+                })
+                return { ...boulder, comments: commentIds }
+            })
+            console.log("newState", newState)
+            state.boulders = newState;
             state.status = "success";
         },
         [fetchBoulders.rejected]: (state) => {
@@ -101,25 +110,42 @@ export const bouldersSlice = createSlice({
         [searchBoulderName.rejected]: (state) => {
             state.status = "failed";
         },
-        [addCommentToBoulder.pending]: (state) => {
+        [addComment.pending]: (state, action) => {
             state.status = "loading";
         },
-        [addCommentToBoulder.fulfilled]: (state, action) => {
-            switch (action.payload.success) {
-                case true:
-                    const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload.boulder._id ? action.payload.boulder : boulder);
-                    state.boulders = editedBouldersList;
-                    state.status = "success";
-                    break;
-                case false:
-                    state.status = "failed";
-                    break;
-                default:
-                    state.status = null;
-                    break;
-            }
+        [addComment.fulfilled]: (state, action) => {
+            // getting the boulder from backend
+            //      find the boulder in state and push new commentid onto it
+            const newState = state.boulders.map((boulder) => {
+                if (boulder._id === action.payload.boulder._id) {
+                    boulder.comments.push(action.payload.commentId);
+                }
+                return boulder;
+            })
+            state.boulders = newState;
+            state.status = "success";
         },
-        [addCommentToBoulder.rejected]: (state) => {
+        [addComment.rejected]: (state, action) => {
+            state.status = "failed";
+        },
+        [deleteComment.pending]: (state, action) => {
+            state.status = "loading";
+        },
+        [deleteComment.fulfilled]: (state, action) => {
+            // need to find the boulder in state and filter out the one that was deleted
+            const { commentId, boulder } = action.payload;
+
+            state.boulders = state.boulders.map((b) => {
+                if (b._id === boulder._id) {
+                    const filteredComments = b.comments.filter((c) => c._id === commentId);
+                    b.comments = filteredComments;
+                }
+                return b;
+            })
+
+            state.status = "success";
+        },
+        [deleteComment.rejected]: (state, action) => {
             state.status = "failed";
         },
         [deleteCommentFromBoulder.pending]: (state) => {
@@ -151,7 +177,12 @@ export const bouldersSlice = createSlice({
             switch (action.payload.success) {
                 case true:
                     if (!state.boulders.find((boulder) => boulder._id === action.payload.boulder._id)) {
-                        state.boulders = [...state.boulders, action.payload.boulder]
+                        let commentIds = [];
+                        action.payload.boulder.comments.forEach((comment) => {
+                            commentIds.push(comment._id);
+                        })
+                        state.boulders = [...state.boulders, { ...action.payload.boulder, comments: commentIds }]
+                        // state.boulders = [...state.boulders, action.payload.boulder]
                     }
                     state.status = "success";
                     break;

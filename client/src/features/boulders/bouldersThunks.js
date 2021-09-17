@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { addComment, deleteComment } from "../comments/commentsThunks";
 
 const url = "http://localhost:5000";
 

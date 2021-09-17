@@ -44,10 +44,12 @@ const Comment = ({ comment, onDeleteComment }) => {
                 </Typography>
             </CardContent>
             <CardActions className={classes.cardAction}>
-                <IconButton className={classes.deleteIcon}>
+                <IconButton
+                    className={classes.deleteIcon}
+                    onClick={() => onDeleteComment(comment._id)}
+                >
                     <DeleteIcon
                         color="secondary"
-                        onClick={() => onDeleteComment(comment._id)}
                     />
                 </IconButton>
             </CardActions>

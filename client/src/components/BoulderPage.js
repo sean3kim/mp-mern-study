@@ -5,6 +5,7 @@ import { Paper, Typography, Button, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import Comment from "./Comment";
 import { deleteCommentFromBoulder, fetchOneBoulder } from "../features/boulders/bouldersThunks";
+import { deleteComment } from "../features/comments/commentsThunks";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { deleteBoulder } from "../features/boulders/bouldersThunks";
 
@@ -61,12 +62,22 @@ const BoulderPage = () => {
     const boulderFromStore = useSelector((state) => {
         const foundBoulder = state.boulders.boulders.find((b) => b._id === id)
         return foundBoulder;
+    });
+    const boulderComments = useSelector((state) => {
+        // have the comment ids from the boulder
+        // need to get all comments that match the id from the state
+        let comments = [];
+        boulderFromStore &&
+            boulderFromStore.comments.forEach((commentId) => {
+                (commentId in state.comments.byId) && comments.push(state.comments.byId[commentId]);
+            })
+        return comments;
     })
     const currentUser = useSelector((state) => state.users.users)
 
     const handleDeleteComment = (commentId) => {
         if (currentUser) {
-            dispatch(deleteCommentFromBoulder({
+            dispatch(deleteComment({
                 boulderId: boulderFromStore._id,
                 commentId,
                 userId: currentUser._id
@@ -96,7 +107,7 @@ const BoulderPage = () => {
                         <Typography className={classes.spacing} variant="h5" >comments</Typography>
 
                         <div>
-                            {boulderFromStore.comments.map((comment) => (
+                            {boulderComments.map((comment) => (
                                 < Comment
                                     key={comment._id}
                                     comment={comment}

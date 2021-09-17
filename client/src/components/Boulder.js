@@ -1,9 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { deleteBoulder } from "../features/boulders/bouldersSlice";
-import { Button, Typography, makeStyles } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Typography, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     deleteButton: {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { addCommentToBoulder } from "../features/boulders/bouldersThunks";
+import { addComment } from "../features/comments/commentsThunks";
 import { useParams, useHistory } from "react-router-dom";
 import { Button, Card, CardHeader, CardContent, TextField, Container, Typography, makeStyles } from '@material-ui/core';
 
@@ -42,7 +43,7 @@ const AddComment = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(currentUser);
-        dispatch(addCommentToBoulder({ comment: { title, body }, boulderId: id, userId: currentUser._id }))
+        dispatch(addComment({ comment: { title, body }, boulderId: id, userId: currentUser._id }))
         history.push("/index");
     }
 
