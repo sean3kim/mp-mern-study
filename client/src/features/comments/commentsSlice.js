@@ -7,7 +7,6 @@ export const commentsSlice = createSlice({
     initialState: {
         byId: {},
         allIds: [],
-        // comments: [],
         status: null
     },
     reducers: {},

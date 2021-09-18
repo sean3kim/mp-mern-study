@@ -4,9 +4,7 @@ import {
     fetchBoulders,
     fetchOneBoulder,
     addBoulder,
-    addCommentToBoulder,
     deleteBoulder,
-    deleteCommentFromBoulder,
     editBoulder,
     searchBoulderName
 } from "./bouldersThunks";
@@ -146,27 +144,6 @@ export const bouldersSlice = createSlice({
             state.status = "success";
         },
         [deleteComment.rejected]: (state, action) => {
-            state.status = "failed";
-        },
-        [deleteCommentFromBoulder.pending]: (state) => {
-            state.status = "loading";
-        },
-        [deleteCommentFromBoulder.fulfilled]: (state, action) => {
-            switch (action.payload.success) {
-                case true:
-                    const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload.boulder._id ? action.payload.boulder : boulder);
-                    state.boulders = editedBouldersList;
-                    state.status = "success";
-                    break;
-                case false:
-                    state.status = "failed";
-                    break;
-                default:
-                    state.status = null;
-                    break;
-            }
-        },
-        [deleteCommentFromBoulder.rejected]: (state) => {
             state.status = "failed";
         },
         [fetchOneBoulder.pending]: (state) => {

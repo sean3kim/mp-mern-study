@@ -36,19 +36,6 @@ export const addBoulder = createAsyncThunk(
     }
 )
 
-export const addCommentToBoulder = createAsyncThunk(
-    "boulders/addComment",
-    async ({ comment, boulderId, userId }) => {
-        try {
-            const { data } = await axios.put(`${url}/show/${boulderId}/add_comment`, { comment, userId });
-            console.log("data", data)
-            return data;
-        } catch (error) {
-            return error.response.data
-        }
-    }
-)
-
 export const deleteBoulder = createAsyncThunk(
     "boulders/delete",
     async (id) => {
@@ -57,23 +44,10 @@ export const deleteBoulder = createAsyncThunk(
     }
 )
 
-export const deleteCommentFromBoulder = createAsyncThunk(
-    "boulders/deleteComment",
-    async ({ boulderId, commentId, userId }) => {
-        try {
-            const { data } = await axios.delete(`${url}/show/${boulderId}`, { data: { commentId, userId } });
-            return data;
-        } catch (error) {
-            return error.response.data
-        }
-    }
-)
-
 export const editBoulder = createAsyncThunk(
     "boulders/edit",
     async (boulder) => {
         try {
-            console.log("in slice: ", boulder)
             await axios.put(`${url}/edit/${boulder._id}`, boulder, { withCredentials: true });
             return { success: true, boulder };
         } catch (error) {
