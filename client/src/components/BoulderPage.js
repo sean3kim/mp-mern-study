@@ -59,10 +59,7 @@ const BoulderPage = () => {
         dispatch(fetchOneBoulder(id));
     }, [])
 
-    const boulderFromStore = useSelector((state) => {
-        const foundBoulder = state.boulders.boulders.find((b) => b._id === id)
-        return foundBoulder;
-    });
+    const boulderFromStore = useSelector((state) => state.boulders.byId[id]);
     const boulderComments = useSelector((state) => {
         // have the comment ids from the boulder
         // need to get all comments that match the id from the state

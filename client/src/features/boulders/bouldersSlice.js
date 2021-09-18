@@ -15,6 +15,8 @@ export const bouldersSlice = createSlice({
     name: "boulders",
     initialState: {
         boulders: [],
+        byId: {},
+        allIds: [],
         searchedFilter: [],
         availableTags: ["powerful", "endurance", "technical", "highball", "lowball", "crimpy", "slopey"],
         status: null
@@ -28,13 +30,71 @@ export const bouldersSlice = createSlice({
         }
     },
     extraReducers: {
+        [fetchBoulders.pending]: (state) => {
+            state.status = "loading";
+        },
+        [fetchBoulders.fulfilled]: (state, action) => {
+            let newState = {};
+            action.payload.forEach((boulder) => {
+                let commentIds = [];
+                const boulderId = boulder._id;
+                boulder.comments.forEach((comment) => {
+                    commentIds.push(comment._id);
+                })
+                boulder = { ...boulder, comments: commentIds };
+                newState[boulderId] = boulder;
+                state.allIds = [...state.allIds, boulderId];
+            })
+
+            state.byId = newState;
+            state.status = "success";
+        },
+        [fetchBoulders.rejected]: (state) => {
+            state.status = "failed";
+        },
+        [fetchOneBoulder.pending]: (state) => {
+            state.status = "loading";
+        },
+        [fetchOneBoulder.fulfilled]: (state, action) => {
+            // if the action payload is already in state boulders, just return state
+            switch (action.payload.success) {
+                case true:
+                    if (!state.boulders.find((boulder) => boulder._id === action.payload.boulder._id)) {
+                        let commentIds = [];
+                        action.payload.boulder.comments.forEach((comment) => {
+                            commentIds.push(comment._id);
+                        })
+                        const fetched = { ...action.payload.boulder, comments: commentIds }
+                        state.boulders = [...state.boulders, fetched];
+                    }
+                    state.status = "success";
+                    break;
+                case false:
+                    state.status = "failed";
+                    break;
+                default:
+                    state.status = null;
+                    break;
+            }
+        },
+        [fetchOneBoulder.rejected]: (state, action) => {
+            state.status = "failed";
+        },
         [addBoulder.pending]: (state) => {
             state.status = "loading";
         },
         [addBoulder.fulfilled]: (state, action) => {
             switch (action.payload.success) {
                 case true:
-                    state.boulders = [...state.boulders, action.payload.boulder];
+                    let boulder = action.payload.boulder;
+                    let commentIds = [];
+                    boulder.comments.forEach((comment) => {
+                        commentIds.push(comment._id);
+                    })
+                    boulder = { ...boulder, comments: commentIds };
+                    // convert comments to a list of comment ids first 
+                    state.byId = { ...state.byId, [boulder._id]: boulder };
+                    // state.boulders = [...state.boulders, action.payload.boulder];
                     state.status = "success";
                     break;
                 case false:
@@ -46,24 +106,6 @@ export const bouldersSlice = createSlice({
             }
         },
         [addBoulder.rejected]: (state, action) => {
-            state.status = "failed";
-        },
-        [fetchBoulders.pending]: (state) => {
-            state.status = "loading";
-        },
-        [fetchBoulders.fulfilled]: (state, action) => {
-            const newState = action.payload.map((boulder) => {
-                let commentIds = [];
-                boulder.comments.forEach((comment) => {
-                    commentIds.push(comment._id)
-                })
-                return { ...boulder, comments: commentIds }
-            })
-            console.log("newState", newState)
-            state.boulders = newState;
-            state.status = "success";
-        },
-        [fetchBoulders.rejected]: (state) => {
             state.status = "failed";
         },
         [deleteBoulder.pending]: (state) => {
@@ -114,13 +156,10 @@ export const bouldersSlice = createSlice({
         [addComment.fulfilled]: (state, action) => {
             // getting the boulder from backend
             //      find the boulder in state and push new commentid onto it
-            const newState = state.boulders.map((boulder) => {
-                if (boulder._id === action.payload.boulder._id) {
-                    boulder.comments.push(action.payload.commentId);
-                }
-                return boulder;
-            })
-            state.boulders = newState;
+            const { boulder, commentId } = action.payload;
+
+            // spread the state.byId, but update just the boulder that matches the id from backend, and in that boulder update the comments array
+            state.byId = { ...state.byId, [boulder._id]: { ...state.byId[boulder._id], comments: [...state.byId[boulder._id].comments, commentId] } }
             state.status = "success";
         },
         [addComment.rejected]: (state, action) => {
@@ -133,45 +172,13 @@ export const bouldersSlice = createSlice({
             // need to find the boulder in state and filter out the one that was deleted
             const { commentId, boulder } = action.payload;
 
-            state.boulders = state.boulders.map((b) => {
-                if (b._id === boulder._id) {
-                    const filteredComments = b.comments.filter((c) => c._id === commentId);
-                    b.comments = filteredComments;
-                }
-                return b;
-            })
+            const foundBoulder = state.byId[boulder._id];
+            const comments = foundBoulder.comments.filter((c) => c._id !== commentId);
 
+            state.byId = { ...state.byId, [boulder._id]: { ...state.byId[boulder._id], comments } }
             state.status = "success";
         },
         [deleteComment.rejected]: (state, action) => {
-            state.status = "failed";
-        },
-        [fetchOneBoulder.pending]: (state) => {
-            state.status = "loading";
-        },
-        [fetchOneBoulder.fulfilled]: (state, action) => {
-            // if the action payload is already in state boulders, just return state
-            switch (action.payload.success) {
-                case true:
-                    if (!state.boulders.find((boulder) => boulder._id === action.payload.boulder._id)) {
-                        let commentIds = [];
-                        action.payload.boulder.comments.forEach((comment) => {
-                            commentIds.push(comment._id);
-                        })
-                        state.boulders = [...state.boulders, { ...action.payload.boulder, comments: commentIds }]
-                        // state.boulders = [...state.boulders, action.payload.boulder]
-                    }
-                    state.status = "success";
-                    break;
-                case false:
-                    state.status = "failed";
-                    break;
-                default:
-                    state.status = null;
-                    break;
-            }
-        },
-        [fetchOneBoulder.rejected]: (state, action) => {
             state.status = "failed";
         },
         [deleteArea.pending]: (state, action) => {

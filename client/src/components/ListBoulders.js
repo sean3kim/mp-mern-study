@@ -31,7 +31,8 @@ const ListBoulders = () => {
     const fromSearch = location.state;
     const classes = useStyles();
 
-    const allBoulders = useSelector((state) => state.boulders.boulders);
+    // const allBoulders = useSelector((state) => state.boulders.boulders);
+    const allBoulders = useSelector((state) => Object.values(state.boulders.byId));
 
     useEffect(() => {
         if (fromSearch) dispatch(clearFilter());
