@@ -20,7 +20,7 @@ exports.deleteBoulder = async (req, res, next) => {
         await User.findByIdAndUpdate(foundBoulder.user, { $pull: { boulder: foundBoulder._id } })
         // finally deleting the boulder itself
         await Boulder.findByIdAndDelete(id);
-        res.send("deleted");
+        res.send({ success: true, boulder: foundBoulder });
     } catch (e) {
         next(e)
     }
@@ -142,7 +142,7 @@ exports.addComment = async (req, res, next) => {
         const populatedBoulder = await Boulder.findById(boulderToAddComment._id)
             .populate({ path: "comments", populate: { path: "author", select: "username" } })
             .populate("user", ["_id", "username"])
-        res.json({ success: true, boulder: populatedBoulder, commentId: addComment._id });
+        res.json({ success: true, boulder: populatedBoulder, comment: addComment });
     } catch (e) {
         next(e);
     }

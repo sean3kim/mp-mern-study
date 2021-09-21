@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addComment, deleteComment } from "./commentsThunks";
-import { fetchBoulders, fetchOneBoulder } from "../boulders/bouldersThunks";
+import { fetchBoulders, fetchOneBoulder, deleteBoulder } from "../boulders/bouldersThunks";
 
 export const commentsSlice = createSlice({
     name: "comments",
@@ -55,13 +55,13 @@ export const commentsSlice = createSlice({
         },
         [addComment.fulfilled]: (state, action) => {
             const boulderComments = action.payload.boulder.comments;
+            const { comment } = action.payload;
             // data from backend is coming into action.payload
             //      coming in in the form of just a boulder with populated comment and user
             let newState = { ...state.byId };
-            boulderComments.forEach((comment) => {
-                newState[comment._id] = comment;
-                state.allIds = [...state.allIds, comment._id];
-            })
+            newState[comment._id] = comment
+
+            state.allIds = [...state.allIds, comment._id];
             state.byId = newState;
             state.status = "success";
         },
@@ -85,6 +85,27 @@ export const commentsSlice = createSlice({
             state.status = "success";
         },
         [deleteComment.rejected]: (state, action) => {
+            state.status = "failed";
+        },
+        [deleteBoulder.pending]: (state, action) => {
+            state.status = "loading";
+        },
+        [deleteBoulder.fulfilled]: (state, action) => {
+            // action payload contains the boulder
+            //  grab the comments array -- should be just the ids since it is not populated in backend
+            //  foreach element in the comments array, remove them from byId and allIds
+            const commentIds = action.payload.boulder.comments;
+            let newState = { ...state.byId };
+
+            for (let id of commentIds) {
+                delete newState[id];
+                state.allIds = state.allIds.filter((oneId) => oneId !== id);
+            }
+
+            state.byId = newState;
+            state.status = "success";
+        },
+        [deleteBoulder.rejected]: (state, action) => {
             state.status = "failed";
         },
     }

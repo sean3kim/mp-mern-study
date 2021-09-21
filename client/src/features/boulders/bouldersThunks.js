@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { addComment, deleteComment } from "../comments/commentsThunks";
 
 const url = "http://localhost:5000";
 
@@ -39,8 +38,8 @@ export const addBoulder = createAsyncThunk(
 export const deleteBoulder = createAsyncThunk(
     "boulders/delete",
     async (id) => {
-        await axios.delete(url, { data: { id } }, { withCredentials: true });
-        return id;
+        const { data } = await axios.delete(url, { data: { id } }, { withCredentials: true });
+        return data;
     }
 )
 

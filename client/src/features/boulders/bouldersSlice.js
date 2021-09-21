@@ -94,6 +94,7 @@ export const bouldersSlice = createSlice({
                     boulder = { ...boulder, comments: commentIds };
                     // convert comments to a list of comment ids first 
                     state.byId = { ...state.byId, [boulder._id]: boulder };
+                    state.allIds = [...state.allIds, boulder._id];
                     // state.boulders = [...state.boulders, action.payload.boulder];
                     state.status = "success";
                     break;
@@ -112,8 +113,15 @@ export const bouldersSlice = createSlice({
             state.status = "loading";
         },
         [deleteBoulder.fulfilled]: (state, action) => {
-            const filteredBoulders = state.boulders.filter((boulder) => boulder._id !== action.payload);
-            state.boulders = filteredBoulders;
+            // action payload contains success and boulder that is deleted
+            const { boulder } = action.payload;
+            let newState = { ...state.byId };
+            delete newState[boulder._id];
+            state.allIds = state.allIds.filter((id) => id !== boulder._id);
+            state.byId = newState;
+            // needs to delete comments as well
+            // remove the entry in byId by id
+            // filter the allIds array of the id
             state.status = "success";
         },
         [deleteBoulder.rejected]: (state) => {
@@ -125,8 +133,8 @@ export const bouldersSlice = createSlice({
         [editBoulder.fulfilled]: (state, action) => {
             switch (action.payload.success) {
                 case true:
-                    const editedBouldersList = state.boulders.map((boulder) => boulder._id === action.payload.boulder._id ? action.payload.boulder : boulder);
-                    state.boulders = editedBouldersList;
+                    const { boulder } = action.payload;
+                    state.byId = { ...state.byId, [boulder._id]: boulder };
                     state.status = "success";
                     break;
                 case false:
@@ -156,10 +164,10 @@ export const bouldersSlice = createSlice({
         [addComment.fulfilled]: (state, action) => {
             // getting the boulder from backend
             //      find the boulder in state and push new commentid onto it
-            const { boulder, commentId } = action.payload;
+            const { boulder, comment } = action.payload;
 
             // spread the state.byId, but update just the boulder that matches the id from backend, and in that boulder update the comments array
-            state.byId = { ...state.byId, [boulder._id]: { ...state.byId[boulder._id], comments: [...state.byId[boulder._id].comments, commentId] } }
+            state.byId = { ...state.byId, [boulder._id]: { ...state.byId[boulder._id], comments: [...state.byId[boulder._id].comments, comment._id] } }
             state.status = "success";
         },
         [addComment.rejected]: (state, action) => {
