@@ -33,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
     spacing: {
         margin: "30px 0px"
     },
-    index: {
+    home: {
         color: theme.palette.info.main,
         textDecoration: "none",
         fontFamily: theme.typography.fontFamily
     },
-    indexSpacing: {
+    homeSpacing: {
         marginTop: "30px"
     },
     deleteButton: {
@@ -118,7 +118,7 @@ const BoulderPage = () => {
                         {(currentUser && currentUser._id === boulderFromStore.user._id) &&
                             <div className={classes.spacing}>
                                 <Button className={classes.editButton} variant="contained" size="small" color="primary">
-                                    <Link className={classes.editLink} to={{ pathname: `/edit/${boulderFromStore._id}`, state: { boulder: boulderFromStore } }}>edit</Link>
+                                    <Link className={classes.editLink} to={{ pathname: `/edit/${boulderFromStore._id}` }}>edit</Link>
                                 </Button>
                                 <Button
                                     className={classes.deleteButton}
@@ -128,7 +128,7 @@ const BoulderPage = () => {
                                     size="small"
                                     onClick={() => {
                                         dispatch(deleteBoulder(boulderFromStore._id))
-                                        history.push("/index")
+                                        history.push("/")
                                     }}>
                                     delete
                                 </Button>
@@ -136,8 +136,8 @@ const BoulderPage = () => {
                         }
                     </div>
                 }
-                <Typography className={classes.indexSpacing}>
-                    <Link className={classes.index} to="/index">back to index page</Link>
+                <Typography className={classes.homeSpacing}>
+                    <Link className={classes.home} to="/">back to home page</Link>
                 </Typography>
             </Paper>
         </div >

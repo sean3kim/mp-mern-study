@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addComment, deleteComment } from "./commentsThunks";
 import { fetchBoulders, fetchOneBoulder, deleteBoulder } from "../boulders/bouldersThunks";
+import { deleteArea } from "../areas/areasThunks";
 
 export const commentsSlice = createSlice({
     name: "comments",
@@ -106,6 +107,18 @@ export const commentsSlice = createSlice({
             state.status = "success";
         },
         [deleteBoulder.rejected]: (state, action) => {
+            state.status = "failed";
+        },
+        [deleteArea.pending]: (state, action) => {
+            state.status = "loading";
+        },
+        [deleteArea.fulfilled]: (state, action) => {
+            // descendents is a list of areas
+            // need to go into each descendent and grab the boulders
+            // inside each of the boulders need to grab the comments
+            state.status = "succes";
+        },
+        [deleteArea.rejected]: (state, action) => {
             state.status = "failed";
         },
     }

@@ -44,7 +44,7 @@ const AddComment = () => {
         e.preventDefault();
         console.log(currentUser);
         dispatch(addComment({ comment: { title, body }, boulderId: id, userId: currentUser._id }))
-        history.push("/index");
+        history.push("/");
     }
 
     return (

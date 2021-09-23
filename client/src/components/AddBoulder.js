@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { addBoulder } from '../features/boulders/bouldersThunks';
 import { makeStyles, Paper, Container, TextField, Checkbox, FormControl, FormControlLabel, FormLabel, Button, Typography } from "@material-ui/core";
 
@@ -53,6 +53,8 @@ const AddBoulder = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles();
+    const loc = useLocation();
+    const area = loc.state && loc.state.area;
 
     const availableTags = useSelector((state) => state.boulders.availableTags)
     const currentUser = useSelector((state) => state.users.users)
@@ -83,9 +85,9 @@ const AddBoulder = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(addBoulder({ name, grade, location, description, tags, userId: currentUser._id }));
+        dispatch(addBoulder({ name, grade, location, description, tags, userId: currentUser._id, area }));
         clearStates();
-        history.push("/index");
+        history.push("/");
     }
 
     return (

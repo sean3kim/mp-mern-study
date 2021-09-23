@@ -50,7 +50,7 @@ const Searched = () => {
                     />
                 ))}
                 <Typography className={classes.linkSpacing}>
-                    <Link className={classes.link} to={{ pathname: "/index", state: { fromSearch: true } }}>back to index</Link>
+                    <Link className={classes.link} to={{ pathname: "/", state: { fromSearch: true } }}>back to home</Link>
                 </Typography>
             </Paper>
         </Container>

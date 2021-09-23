@@ -14,7 +14,7 @@ import { addComment, deleteComment } from "../comments/commentsThunks";
 export const bouldersSlice = createSlice({
     name: "boulders",
     initialState: {
-        boulders: [],
+        // boulders: [],
         byId: {},
         allIds: [],
         searchedFilter: [],
@@ -59,13 +59,17 @@ export const bouldersSlice = createSlice({
             // if the action payload is already in state boulders, just return state
             switch (action.payload.success) {
                 case true:
-                    if (!state.boulders.find((boulder) => boulder._id === action.payload.boulder._id)) {
+                    const isFound = state.byId[action.payload.boulder._id] && true;
+                    // if (!state.boulders.find((boulder) => boulder._id === action.payload.boulder._id)) {
+                    if (!isFound) {
                         let commentIds = [];
                         action.payload.boulder.comments.forEach((comment) => {
                             commentIds.push(comment._id);
                         })
-                        const fetched = { ...action.payload.boulder, comments: commentIds }
-                        state.boulders = [...state.boulders, fetched];
+                        const fetched = { ...action.payload.boulder, comments: commentIds };
+                        state.byId = { ...state.byId, [state.byId[fetched._id]]: fetched };
+                        state.allIds = [...state.allIds, fetched._id];
+                        // state.boulders = [...state.boulders, fetched];
                     }
                     state.status = "success";
                     break;
@@ -198,20 +202,36 @@ export const bouldersSlice = createSlice({
             const { descendents } = action.payload;
             const parentArea = action.payload.area;
 
-            let allBoulders;
-            if (descendents.length > 0) {
-                // grab all the boulders from the descendents
-                // filter them from the state boulders array
-                const descBoulders = descendents.map((d) => d.boulders).flat();
-                allBoulders = descBoulders.concat(parentArea.boulders).flat();
-            } else {
-                allBoulders = parentArea.boulders;
-            }
+            // go through all descendents and delete any boulders
+            // delete any boulders in parentarea
+            let newState = state.byId;
+            descendents.forEach((d) => {
+                d.boulders.forEach((boulder) => {
+                    delete newState[boulder._id];
+                    state.allIds = state.allIds.filter((id) => id !== boulder._id)
+                })
+            })
 
-            const newState = state.boulders.filter((boulder) => !allBoulders.includes(boulder))
-            state.boulders = newState;
+            parentArea.boulders.forEach((boulder) => {
+                delete newState[boulder._id];
+                state.allIds = state.allIds.filter((id) => id !== boulder._id)
+            })
+
+            state.byId = newState;
 
 
+            // let allBoulders;
+            // if (descendents.length > 0) {
+            //     // grab all the boulders from the descendents
+            //     // filter them from the state boulders array
+            //     const descBoulders = descendents.map((d) => d.boulders).flat();
+            //     allBoulders = descBoulders.concat(parentArea.boulders).flat();
+            // } else {
+            //     allBoulders = parentArea.boulders;
+            // }
+
+            // const newState = state.boulders.filter((boulder) => !allBoulders.includes(boulder))
+            // state.boulders = newState;
             state.status = "success";
         },
         [deleteArea.rejected]: (state, action) => {

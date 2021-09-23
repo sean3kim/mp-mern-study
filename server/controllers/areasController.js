@@ -110,31 +110,3 @@ exports.deleteArea = async (req, res, next) => {
     }
 }
 
-// exports.addNewBoulder = async (req, res, next) => {
-//     try {
-//         const { name, grade, location, description, tags, userId } = req.body;
-//         const foundUser = await User.findById(userId);
-//         const newBoulder = { name, grade, location, description, tags, user: foundUser };
-//         const addBoulder = new Boulder(newBoulder);
-
-//         // trying to add the boulder to the user without having to findbyidandupdate again
-//         if (!foundUser) {
-//             console.log("didnt find user");
-//             return next(new ErrorResponse("please login", 401));
-//         }
-//         foundUser.boulder.push(addBoulder);
-//         await addBoulder.save();
-//         await foundUser.save();
-//         // await foundUserAgain.save();
-//         const populatedBoulder = await Boulder.findById(addBoulder._id)
-//             .populate({ path: "comments", populate: { path: "author", select: "username" } })
-//             .populate("user", ["_id", "username"]);
-//         res.json({
-//             success: true,
-//             boulder: populatedBoulder
-//         });
-//     } catch (e) {
-//         console.log(e.message)
-//         next(e)
-//     }
-// }

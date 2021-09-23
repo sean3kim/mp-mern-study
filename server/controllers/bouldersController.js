@@ -1,6 +1,7 @@
 const Boulder = require("../models/boulderModel");
 const Comment = require("../models/commentModel");
 const User = require("../models/userModel");
+const Area = require("../models/areaModel");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 exports.getAllBoulders = async (req, res) => {
@@ -28,8 +29,9 @@ exports.deleteBoulder = async (req, res, next) => {
 
 exports.addNewBoulder = async (req, res, next) => {
     try {
-        const { name, grade, location, description, tags, userId } = req.body;
+        const { name, grade, location, description, tags, userId, area } = req.body;
         const foundUser = await User.findById(userId);
+        const foundArea = await Area.findById(area._id);
         const newBoulder = { name, grade, location, description, tags, user: foundUser };
         const addBoulder = new Boulder(newBoulder);
 
@@ -39,7 +41,9 @@ exports.addNewBoulder = async (req, res, next) => {
             return next(new ErrorResponse("please login", 401));
         }
         foundUser.boulder.push(addBoulder);
+        foundArea.boulders.push(addBoulder);
         await addBoulder.save();
+        await foundArea.save();
         await foundUser.save();
         // await foundUserAgain.save();
         const populatedBoulder = await Boulder.findById(addBoulder._id)
@@ -47,7 +51,8 @@ exports.addNewBoulder = async (req, res, next) => {
             .populate("user", ["_id", "username"]);
         res.json({
             success: true,
-            boulder: populatedBoulder
+            boulder: populatedBoulder,
+            areaId: foundArea._id
         });
     } catch (e) {
         console.log(e.message)

@@ -38,7 +38,7 @@ const RegisterPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(registerUser({ username, password, email }))
-        history.push("/index");
+        history.push("/");
     }
 
     return (

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: "10px",
         textTransform: "none"
     },
-    indexLink: {
+    homeLink: {
         color: theme.palette.info.main,
         textDecoration: "none",
         fontFamily: theme.typography.fontFamily
@@ -56,10 +56,10 @@ const EditBoulder = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const loc = useLocation();
-    const boulderToEdit = loc.state.boulder;
     const classes = useStyles();
 
     const availableTags = useSelector((state) => state.boulders.availableTags)
+    const boulderToEdit = useSelector((state) => state.boulders.byId[id]);
 
     useEffect(() => {
         setName(boulderToEdit.name);
@@ -69,7 +69,6 @@ const EditBoulder = () => {
         setTags(boulderToEdit.tags);
         setComments(boulderToEdit.comments);
         setUser(boulderToEdit.user);
-        console.log("edit page user: ", boulderToEdit.user)
         const initialCheckbox = availableTags.map((tag) =>
             boulderToEdit.tags.includes(tag) ? true : false
         )
@@ -205,7 +204,7 @@ const EditBoulder = () => {
                         </Button>
                     </div>
                 </form>
-                <Link className={classes.indexLink} to="/index">back to index page</Link>
+                <Link className={classes.homeLink} to="/">back to home page</Link>
             </Paper>
         </Container>
     )

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { loginUser } from "../features/users/usersThunks";
 import { makeStyles, Card, CardHeader, CardContent, Container, TextField, Button } from "@material-ui/core";
 
@@ -33,7 +33,8 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
-    // const from = location.state && location.state.from;
+    // const { from } = location.state ? location.state : { from: { pathname: "/" } };
+    const from = useRef(location.state ? location.state.from : { pathname: "/" });
     // const test = useRef(from)
     // const match = useRouteMatch();
     const classes = useStyles();
@@ -45,8 +46,12 @@ const LoginPage = () => {
         // console.log("location state: ", location.state)
         // console.log("useref: ", test.current)
         // if (loginStatus && test.current) history.push(test.current);
-        if (loginStatus) history.push("/index")
         // else if (loginStatus && !test.current) history.push("/index");
+
+        // if (loginStatus) history.push("/")
+        console.log("location state", location.state)
+        console.log("from", from);
+        if (loginStatus) history.replace(from.current)
         else history.push("/login");
     }, [loginStatus])
 

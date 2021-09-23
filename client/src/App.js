@@ -16,6 +16,7 @@ import Layout from "./components/Layout";
 import Areas from "./components/Areas";
 import AddArea from "./components/AddArea";
 import AreaPage from "./components/AreaPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { fetchBoulders } from "./features/boulders/bouldersThunks";
 import { checkLoggedIn } from "./features/users/usersThunks";
@@ -51,7 +52,6 @@ function App() {
     dispatch(checkLoggedIn());
   }, [])
 
-  const loginStatus = useSelector((state) => state.users.isLoggedIn)
   const stateStatus = useSelector((state) => state.boulders.status)
 
   return (
@@ -62,21 +62,21 @@ function App() {
             <NavBar />
             {stateStatus === "failed" ? <ErrorPage /> :
               <Switch>
-                <Route path="/new" >
-                  {loginStatus ? <AddBoulder /> : <Redirect to={{ pathname: "/login", state: { from: "/new" } }} />}
-                </Route>
+                <ProtectedRoute path="/new" >
+                  <AddBoulder />
+                </ProtectedRoute>
                 <Route path="/" exact>
                   <HomePage />
                 </Route>
                 <Route path="/index" >
                   <ListBoulders />
                 </Route>
-                <Route path="/edit/:id">
-                  {loginStatus ? <EditBoulder /> : <Redirect to={{ pathname: "/login", state: { from: "editBoulder" } }} />}
-                </Route>
-                <Route path="/show/:id/add_comment">
-                  {loginStatus ? <AddComment /> : <Redirect to={{ pathname: "/login", state: { from: "addComment" } }} />}
-                </Route>
+                <ProtectedRoute path="/edit/:id">
+                  <EditBoulder />
+                </ProtectedRoute>
+                <ProtectedRoute path="/show/:id/add_comment">
+                  <AddComment />
+                </ProtectedRoute>
                 <Route path="/search">
                   <Searched />
                 </Route>

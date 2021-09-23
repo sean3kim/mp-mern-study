@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.warning.main,
         textTransform: "none",
     },
-    indexLink: {
+    homeLink: {
         textDecoration: "none",
     },
     spacing: {
@@ -30,13 +30,13 @@ const HomePage = () => {
             <Container className={classes.root} maxWidth="xl">
                 <Typography variant="h2">mp</Typography>
                 <Typography>studying mern stack</Typography>
-                <Link to="/index" className={classes.indexLink}>
+                <Link to="/index" className={classes.homeLink}>
                     <Button variant="contained" className={classes.allBouldersButton}>
                         to all boulders
                     </Button>
                 </Link>
                 <div className={classes.spacing}>
-                    <Link to="/areas" className={classes.indexLink}>
+                    <Link to="/areas" className={classes.homeLink}>
                         <Button variant="contained" className={classes.allBouldersButton}>
                             to all areas
                         </Button>

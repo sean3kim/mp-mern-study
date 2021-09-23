@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useHistory } from "react-router-dom";
 import { fetchOneArea, deleteArea } from "../features/areas/areasThunks";
 import { makeStyles, Paper, Typography, Button } from "@material-ui/core";
+import Boulder from "./Boulder";
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,11 +22,16 @@ const AreaPage = () => {
 
     useEffect(() => {
         dispatch(fetchOneArea(id));
-    })
+    }, [])
 
-    const area = useSelector((state) => {
-        const foundArea = state.areas.areas.find((a) => a._id === id)
-        return foundArea;
+    const area = useSelector((state) => state.areas.byId[id]);
+    const areaBoulders = useSelector((state) => {
+        let boulders = [];
+        area &&
+            area.boulders.forEach((boulderId) => {
+                (boulderId in state.boulders.byId) && boulders.push(state.boulders.byId[boulderId]);
+            })
+        return boulders;
     })
 
     const handleDelete = () => {
@@ -41,6 +47,13 @@ const AreaPage = () => {
                     <Typography variant="h4">{area.name}</Typography>
                 </div>
             }
+            {areaBoulders.map((boulder) => (
+                <Boulder
+                    key={boulder._id}
+                    id={boulder._id}
+                    boulder={boulder}
+                />
+            ))}
             <Link to={{ pathname: "/areas/new", state: { fromArea: area } }}>
                 <Button>
                     add a new area
@@ -57,6 +70,16 @@ const AreaPage = () => {
                     delete
                 </Button>
             </div>
+            <Typography>
+                <Link to={{ pathname: "/new", state: { area } }} >
+                    <Button
+                        variant="contained"
+                        size="small"
+                    >
+                        add a new boulder
+                    </Button>
+                </Link>
+            </Typography>
         </Paper>
     )
 }
