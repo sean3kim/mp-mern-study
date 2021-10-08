@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = "http://localhost:5000";
+// const url = "http://localhost:5000";
+const url = "https://mp-mern.herokuapp.com";
 
 export const fetchAreas = createAsyncThunk(
     "areas/fetchAreas",
