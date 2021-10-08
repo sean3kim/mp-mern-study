@@ -1,6 +1,6 @@
 
 if (process.env.NODE_ENV !== "production") {
-    require("dotenv").config({ path: "../.env" });
+    require("dotenv").config({ path: "./.env" });
 }
 
 const express = require("express");
@@ -35,7 +35,7 @@ db.once("open", () => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-app.use(cookieParser(process.env.SESSION_SECRET));
+app.use(cookieParser());
 
 const sessionConfig = {
     secret: process.env.SESSION_SECRET,
