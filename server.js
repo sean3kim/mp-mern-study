@@ -1,6 +1,8 @@
 
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config({ path: "../.env" });
+} else {
+    app.use(express.static("client/build"));
 }
 
 const express = require("express");
