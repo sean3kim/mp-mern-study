@@ -7,7 +7,8 @@ const {
     login,
     logout,
     checkLoggedIn,
-    secret
+    secret,
+    test
 } = require("../controllers/usersController");
 
 
@@ -18,6 +19,7 @@ router.route("/register")
     .post(register)
 
 router.route("/login")
+    .get(test)
     .post(login)
 
 router.route("/logout")
