@@ -1,8 +1,6 @@
 
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config({ path: "../.env" });
-} else {
-    app.use(express.static("client/build"));
 }
 
 const express = require("express");
@@ -17,7 +15,9 @@ const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/errorHandler.js");
 
 const app = express();
-
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+}
 const dbURL = process.env.DB_URL || "mongodb://localhost:27017/mp-mern"
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
