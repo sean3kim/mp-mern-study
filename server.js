@@ -57,6 +57,9 @@ app.use(session(sessionConfig))
 app.use("/", boulderRoutes);
 app.use("/", userRoutes);
 app.use("/areas", areaRoutes);
+app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "build", "index.html"))
+})
 
 app.use(errorHandler);
 

@@ -4,14 +4,6 @@ const ErrorResponse = require("../utils/ErrorResponse");
 
 const maxAge = 60 * 60 * 24 * 3
 
-exports.test = (req, res, next) => {
-    try {
-        res.json({ success: true });
-    } catch (e) {
-        next(e);
-    }
-}
-
 exports.register = async (req, res, next) => {
     try {
         const { username, password, email } = req.body;
