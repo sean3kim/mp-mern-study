@@ -35,7 +35,7 @@ db.once("open", () => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-app.use(cookieParser());
+app.use(cookieParser(process.env.SESSION_SECRET));
 
 const sessionConfig = {
     secret: process.env.SESSION_SECRET,
