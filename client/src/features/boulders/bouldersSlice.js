@@ -35,6 +35,7 @@ export const bouldersSlice = createSlice({
         },
         [fetchBoulders.fulfilled]: (state, action) => {
             let newState = {};
+            console.log(action);
             action.payload.forEach((boulder) => {
                 let commentIds = [];
                 const boulderId = boulder._id;
