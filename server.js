@@ -61,6 +61,7 @@ app.use("/", boulderRoutes);
 app.use("/", userRoutes);
 app.use("/areas", areaRoutes);
 app.get("*", (req, res) => {
+    console.log("didn't find path");
     res.sendFile(path.join(__dirname, "client/build", "index.html"))
 })
 
