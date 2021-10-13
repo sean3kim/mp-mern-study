@@ -7,6 +7,7 @@ const url = "https://mp-mern.herokuapp.com";
 export const fetchBoulders = createAsyncThunk(
     "boulders/fetch",
     async () => {
+        console.log(url)
         const { data } = await axios.get(`${url}/`, { withCredentials: true });
         console.log("data in thunk: ", data)
         return data;
