@@ -34,6 +34,7 @@ db.once("open", () => {
     console.log("database connected")
 });
 
+app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
@@ -59,7 +60,7 @@ app.use(session(sessionConfig))
 app.use("/", boulderRoutes);
 app.use("/", userRoutes);
 app.use("/areas", areaRoutes);
-app.get("*", function (req, res) {
+app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client/build", "index.html"))
 })
 
