@@ -8,6 +8,7 @@ export const fetchBoulders = createAsyncThunk(
     "boulders/fetch",
     async () => {
         const { data } = await axios.get(`${url}/`, { withCredentials: true });
+        console.log("data in thunk: ", data)
         return data;
     }
 )
