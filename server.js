@@ -16,10 +16,10 @@ const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/errorHandler.js");
 
 const app = express();
-if (process.env.NODE_ENV === "production") {
-    // app.use(express.static("client/build"));
-    // app.use(express.static(path.join(__dirname, 'client/build')));
-}
+// if (process.env.NODE_ENV === "production") {
+// app.use(express.static("client/build"));
+// app.use(express.static(path.join(__dirname, 'client/build')));
+// }
 const dbURL = process.env.DB_URL || "mongodb://localhost:27017/mp-mern"
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
