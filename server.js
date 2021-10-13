@@ -18,7 +18,7 @@ const errorHandler = require("./middleware/errorHandler.js");
 const app = express();
 if (process.env.NODE_ENV === "production") {
     // app.use(express.static("client/build"));
-    app.use(express.static(path.join(__dirname, 'client/build')));
+    // app.use(express.static(path.join(__dirname, 'client/build')));
 }
 const dbURL = process.env.DB_URL || "mongodb://localhost:27017/mp-mern"
 mongoose.connect(dbURL, {
@@ -34,7 +34,6 @@ db.once("open", () => {
     console.log("database connected")
 });
 
-app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
@@ -60,6 +59,8 @@ app.use(session(sessionConfig))
 app.use("/", boulderRoutes);
 app.use("/", userRoutes);
 app.use("/areas", areaRoutes);
+
+app.use(express.static(path.join(__dirname, 'client/build')));
 app.get("*", (req, res) => {
     console.log("didn't find path");
     res.sendFile(path.join(__dirname, "client/build", "index.html"))
