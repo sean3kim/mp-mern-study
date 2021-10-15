@@ -28,6 +28,9 @@ mongoose.connect(dbURL, {
     useFindAndModify: false
 });
 
+
+
+
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
@@ -56,9 +59,12 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig))
 
-app.use("/", boulderRoutes);
-app.use("/", userRoutes);
-app.use("/areas", areaRoutes);
+
+// TRY MOVING THESE TO /api/
+// noticed that pages with a get that matches the url is returning just the server data and is displayed on website
+app.use("/api", boulderRoutes);
+app.use("/api", userRoutes);
+app.use("/api/areas", areaRoutes);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.get("*", (req, res) => {

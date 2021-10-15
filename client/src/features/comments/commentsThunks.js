@@ -8,7 +8,7 @@ export const addComment = createAsyncThunk(
     "comments/addComment",
     async ({ comment, boulderId, userId }) => {
         try {
-            const { data } = await axios.put(`${url}/show/${boulderId}/add_comment`, { comment, userId });
+            const { data } = await axios.put(`${url}/api/show/${boulderId}/add_comment`, { comment, userId });
             console.log("data", data)
             return data;
         } catch (error) {
@@ -22,7 +22,7 @@ export const deleteComment = createAsyncThunk(
     "comments/deleteComment",
     async ({ boulderId, commentId, userId }) => {
         try {
-            const { data } = await axios.delete(`${url}/show/${boulderId}`, { data: { commentId, userId } });
+            const { data } = await axios.delete(`${url}/api/show/${boulderId}`, { data: { commentId, userId } });
             return data;
         } catch (error) {
             return error.response.data

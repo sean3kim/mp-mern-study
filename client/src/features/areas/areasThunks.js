@@ -7,7 +7,7 @@ const url = "https://mp-mern.herokuapp.com";
 export const fetchAreas = createAsyncThunk(
     "areas/fetchAreas",
     async () => {
-        const { data } = await axios.get(`${url}/areas`, { withCredentials: true });
+        const { data } = await axios.get(`${url}/api/areas`, { withCredentials: true });
         return data;
     }
 )
@@ -16,7 +16,7 @@ export const fetchOneArea = createAsyncThunk(
     "areas/fetchOneArea",
     async (id) => {
         try {
-            const { data } = await axios.get(`${url}/areas/show/${id}`, { withCredentials: true })
+            const { data } = await axios.get(`${url}/api/areas/show/${id}`, { withCredentials: true })
             return data;
         } catch (error) {
             return error.response.data;
@@ -28,7 +28,7 @@ export const addArea = createAsyncThunk(
     "areas/addArea",
     async (area) => {
         try {
-            const { data } = await axios.post(`${url}/areas/new`, area, { withCredentials: true })
+            const { data } = await axios.post(`${url}/api/areas/new`, area, { withCredentials: true })
             return data;
         } catch (error) {
             return error.response.data
@@ -40,7 +40,7 @@ export const deleteArea = createAsyncThunk(
     "areas/deleteArea",
     async (area) => {
         try {
-            const { data } = await axios.delete(`${url}/areas`, { data: { id: area._id } }, { withCredentials: true })
+            const { data } = await axios.delete(`${url}/api/areas`, { data: { id: area._id } }, { withCredentials: true })
             return data;
         } catch (error) {
             return error.response.data
