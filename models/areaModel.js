@@ -6,6 +6,9 @@ const AreaSchema = new Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String
+    },
     boulders: [{ type: Schema.Types.ObjectId, ref: "Boulder" }],
     path: [{ type: Schema.Types.ObjectId, ref: "Area" }],
     parent: {

@@ -12,6 +12,19 @@ const useStyles = makeStyles((theme) => ({
         padding: "20px",
         margin: "40px"
     },
+    links: {
+        textDecoration: "none",
+    },
+    buttons: {
+        backgroundColor: theme.palette.warning.main,
+        textTransform: "none",
+        marginBottom: "10px",
+        marginRight: "10px"
+    },
+    deleteButton: {
+        textTransform: "none",
+        marginBottom: "10px"
+    }
 }))
 
 const AreaPage = () => {
@@ -42,10 +55,14 @@ const AreaPage = () => {
     return (
         <Paper className={classes.paper}>
             {area &&
-                <div>
-                    {area.path.map((element) => <Typography key={element._id} display="inline">{element.name} &gt; </Typography>)}
-                    <Typography variant="h4">{area.name}</Typography>
-                </div>
+                <>
+                    <div>
+                        {area.path.map((element) => <Typography key={element._id} display="inline">{element.name} &gt; </Typography>)}
+                        <Typography variant="h4">{area.name}</Typography>
+                    </div>
+                    <Typography variant="h5">description</Typography>
+                    <Typography variant="body1">{area.description}</Typography>
+                </>
             }
             {areaBoulders.map((boulder) => (
                 <Boulder
@@ -54,14 +71,28 @@ const AreaPage = () => {
                     boulder={boulder}
                 />
             ))}
-            <Link to={{ pathname: "/areas/new", state: { fromArea: area } }}>
-                <Button>
-                    add a new area
+            <Link to={{ pathname: "/areas/new", state: { fromArea: area } }} className={classes.links}>
+                <Button
+                    className={classes.buttons}
+                    variant="contained"
+                    size="small"
+                >
+                    add a subarea
+                </Button>
+            </Link>
+            <Link to={{ pathname: "/new", state: { area } }} className={classes.links}>
+                <Button
+                    className={classes.buttons}
+                    variant="contained"
+                    size="small"
+                >
+                    add a new boulder
                 </Button>
             </Link>
             <div >
                 <Button
                     startIcon={<DeleteIcon />}
+                    className={classes.deleteButton}
                     color="secondary"
                     variant="contained"
                     size="small"
@@ -70,16 +101,6 @@ const AreaPage = () => {
                     delete
                 </Button>
             </div>
-            <Typography>
-                <Link to={{ pathname: "/new", state: { area } }} >
-                    <Button
-                        variant="contained"
-                        size="small"
-                    >
-                        add a new boulder
-                    </Button>
-                </Link>
-            </Typography>
         </Paper>
     )
 }

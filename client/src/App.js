@@ -89,9 +89,9 @@ function App() {
                 <Route path="/register">
                   <RegisterPage />
                 </Route>
-                <Route path="/areas/new">
+                <ProtectedRoute path="/areas/new">
                   <AddArea />
-                </Route>
+                </ProtectedRoute>
                 <Route path="/areas/show/:id">
                   <AreaPage />
                 </Route>

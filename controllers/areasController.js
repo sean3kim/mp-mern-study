@@ -63,10 +63,10 @@ exports.getOneArea = async (req, res, next) => {
 
 exports.addArea = async (req, res, next) => {
     try {
-        const { name, boulders, path, parent } = req.body;
+        const { name, description, boulders, path, parent } = req.body;
 
         // create a new area
-        const newArea = new Area({ name, boulders, path, parent });
+        const newArea = new Area({ name, description, boulders, path, parent });
         await newArea.save();
 
         const populatedArea = await Area.findById(newArea._id)

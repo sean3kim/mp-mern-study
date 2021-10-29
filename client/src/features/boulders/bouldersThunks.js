@@ -1,8 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { DEV } from "../../proddev";
 
 // const url = "http://localhost:5000";
-const url = "https://mp-mern.herokuapp.com";
+// const url = "https://mp-mern.herokuapp.com";
+const url = DEV ? "http://localhost:5000" : "https://mp-mern.herokuapp.com";
 
 export const fetchBoulders = createAsyncThunk(
     "boulders/fetch",
