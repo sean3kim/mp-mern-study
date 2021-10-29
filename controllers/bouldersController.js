@@ -8,7 +8,7 @@ exports.getAllBoulders = async (req, res) => {
     const allBoulders = await Boulder.find()
         .populate({ path: "comments", populate: { path: "author", select: "username" } })
         .populate("user", ["_id", "username"]);
-    console.log(allBoulders);
+    // console.log(allBoulders);
     res.json(allBoulders);
 }
 

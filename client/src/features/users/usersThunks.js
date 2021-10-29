@@ -23,7 +23,6 @@ export const loginUser = createAsyncThunk(
     async (user) => {
         try {
             const { data } = await axios.post(`${url}/api/login`, user, { withCredentials: true })
-            console.log(data)
             return data
         } catch (error) {
             return error.response.data;
@@ -34,8 +33,8 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
     "users/logout",
     async (user) => {
-        await axios.post(`${url}/api/logout`, user, { withCredentials: true })
-        return
+        const { data } = await axios.get(`${url}/api/logout`, user, { withCredentials: true })
+        return data
     }
 )
 

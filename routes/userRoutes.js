@@ -21,7 +21,7 @@ router.route("/login")
     .post(login)
 
 router.route("/logout")
-    .post(logout)
+    .get(logout)
 
 router.route("/checkLoggedIn")
     .get(checkLoggedIn)

@@ -40,10 +40,17 @@ exports.login = async (req, res, next) => {
 }
 
 exports.logout = (req, res) => {
+    // console.log("in logout")
     if (req.cookies.jwt) {
-        res.cookie("jwt", "", { expiresIn: Date.now() })
+        // console.log("1", req.cookies.jwt);
+        // console.log("found jwt in cookie, logged out")
+        res.cookie("jwt", "", { httpOnly: true, expiresIn: Date.now() - 1000 });
+        // console.log("2", req.cookies.jwt);
+        // res.clearCookie("jwt", { httpOnly: true, maxAge: maxAge });
+        // console.log("3", req.cookies.jwt);
         res.send("logged out");
     } else {
+        console.log("didn't find jwt in cookie")
         res.send("no user logged in to logout")
     }
 }

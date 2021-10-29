@@ -80,6 +80,7 @@ export const userSlice = createSlice({
                 state.isLoggedIn = false;
                 state.status = "failed";
             } else {
+                console.log("checkloggedin action payload", action.payload)
                 state.users = { _id: action.payload._id, username: action.payload.username }
                 state.isLoggedIn = true;
                 state.status = "success";

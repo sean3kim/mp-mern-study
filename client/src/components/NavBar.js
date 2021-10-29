@@ -63,6 +63,7 @@ const NavBar = () => {
                     <div className={classes.search} >
                         <Search />
                     </div>
+                    {console.log("isLoggedIn value: ", isLoggedIn)}
                     {!isLoggedIn ?
                         <div>
                             <div>

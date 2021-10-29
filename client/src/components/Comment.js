@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from "react-redux";
 import { makeStyles, Typography, Card, CardHeader, CardContent, CardActions, IconButton } from '@material-ui/core'
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
@@ -28,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 const Comment = ({ comment, onDeleteComment }) => {
     const classes = useStyles();
 
+    const currentUser = useSelector((state) => state.users.users);
+
     return (
         <Card variant="outlined" className={classes.cardRoot}>
             <CardHeader
@@ -43,16 +46,18 @@ const Comment = ({ comment, onDeleteComment }) => {
                     {comment.body}
                 </Typography>
             </CardContent>
-            <CardActions className={classes.cardAction}>
-                <IconButton
-                    className={classes.deleteIcon}
-                    onClick={() => onDeleteComment(comment._id)}
-                >
-                    <DeleteIcon
-                        color="secondary"
-                    />
-                </IconButton>
-            </CardActions>
+            {(currentUser && currentUser._id === comment.author._id) &&
+                <CardActions className={classes.cardAction}>
+                    <IconButton
+                        className={classes.deleteIcon}
+                        onClick={() => onDeleteComment(comment._id)}
+                    >
+                        <DeleteIcon
+                            color="secondary"
+                        />
+                    </IconButton>
+                </CardActions>
+            }
         </Card>
     )
 }

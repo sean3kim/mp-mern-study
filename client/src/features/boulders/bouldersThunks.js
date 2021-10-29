@@ -9,9 +9,7 @@ const url = DEV ? "http://localhost:5000" : "https://mp-mern.herokuapp.com";
 export const fetchBoulders = createAsyncThunk(
     "boulders/fetch",
     async () => {
-        console.log(url)
         const { data } = await axios.get(`${url}/api`, { withCredentials: true });
-        console.log("data in thunk: ", data)
         return data;
     }
 )
