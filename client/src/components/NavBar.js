@@ -47,8 +47,9 @@ const NavBar = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const handleLogout = () => {
-        dispatch(logoutUser(user))
+    const handleLogout = (e) => {
+        e.preventDefault()
+        dispatch(logoutUser());
         history.push("/");
     }
 
@@ -63,7 +64,6 @@ const NavBar = () => {
                     <div className={classes.search} >
                         <Search />
                     </div>
-                    {console.log("isLoggedIn value: ", isLoggedIn)}
                     {!isLoggedIn ?
                         <div>
                             <div>
@@ -78,13 +78,19 @@ const NavBar = () => {
                             </div>
                         </div> :
                         <Typography className={classes.userLinkTexts}>
-                            <Link href="" className={classes.userLinks} color="inherit" onClick={handleLogout}>logout</Link>
+                            <Link
+                                href="/"
+                                className={classes.userLinks}
+                                color="inherit"
+                                onClick={(e) => handleLogout(e)}
+                            >
+                                logout</Link>
                         </Typography>
                     }
                 </Toolbar>
             </AppBar>
 
-        </div>
+        </div >
     )
 }
 

@@ -1,4 +1,3 @@
-
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config({ path: "./.env" });
 }
@@ -39,6 +38,7 @@ db.once("open", () => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// app.use(cors({ credentials: true, origin: true }));
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(cookieParser());
 
@@ -66,15 +66,11 @@ app.use("/api", boulderRoutes);
 app.use("/api", userRoutes);
 app.use("/api/areas", areaRoutes);
 
-app.use(express.static(path.join(__dirname, 'client/build')));
-app.get("*", (req, res) => {
-    console.log("didn't find path");
-    // let url = path.join(__dirname, 'client/build', 'index.html');
-    // if (!url.startsWith('/app/')) // since we're on local windows
-    //     url = url.substring(1);
-    // res.sendFile(url);
-    res.sendFile(path.join(__dirname, "client/build", "index.html"))
-})
+// app.use(express.static(path.join(__dirname, 'client/build')));
+// app.get("*", (req, res) => {
+//     console.log("didn't find path");
+//     res.sendFile(path.join(__dirname, "client/build", "index.html"))
+// })
 
 app.use(errorHandler);
 

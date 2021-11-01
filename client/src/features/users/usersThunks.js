@@ -32,9 +32,13 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
     "users/logout",
-    async (user) => {
-        const { data } = await axios.get(`${url}/api/logout`, user, { withCredentials: true })
-        return data
+    async () => {
+        try {
+            const { data } = await axios.get(`${url}/api/logout`, { withCredentials: true })
+            return data;
+        } catch (error) {
+            return error.response.data;
+        }
     }
 )
 
