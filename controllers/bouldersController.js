@@ -8,7 +8,6 @@ exports.getAllBoulders = async (req, res) => {
     const allBoulders = await Boulder.find()
         .populate({ path: "comments", populate: { path: "author", select: "username" } })
         .populate("user", ["_id", "username"]);
-    // console.log(allBoulders);
     res.json(allBoulders);
 }
 
@@ -129,8 +128,7 @@ exports.addComment = async (req, res, next) => {
             return next(new ErrorResponse("please provide title and comment body", 400))
         }
 
-        const newComment = { title, body }
-        const addComment = new Comment(newComment);
+        const addComment = new Comment({ title, body });
         const foundUser = await User.findByIdAndUpdate(userId, { $push: { comments: addComment } }, { new: true });
         addComment.author = foundUser._id;
         const boulderToAddComment = await Boulder.findByIdAndUpdate(id, { $push: { comments: addComment } }, { new: true })
@@ -148,7 +146,9 @@ exports.addComment = async (req, res, next) => {
         const populatedBoulder = await Boulder.findById(boulderToAddComment._id)
             .populate({ path: "comments", populate: { path: "author", select: "username" } })
             .populate("user", ["_id", "username"])
-        res.json({ success: true, boulder: populatedBoulder, comment: addComment });
+        const populatedComment = await Comment.findById(addComment._id)
+            .populate("author", ["_id", "username"])
+        res.json({ success: true, boulder: populatedBoulder, comment: populatedComment });
     } catch (e) {
         next(e);
     }

@@ -11,7 +11,8 @@ export const addComment = createAsyncThunk(
     async ({ comment, boulderId, userId }) => {
         try {
             const { data } = await axios.put(`${url}/api/show/${boulderId}/add_comment`, { comment, userId });
-            console.log("data", data)
+            console.log("in addcomment thunk")
+            console.log("comment data from addComment", data)
             return data;
         } catch (error) {
             return error.response.data
