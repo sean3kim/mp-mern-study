@@ -6,6 +6,7 @@ const AreaSchema = new Schema({
         type: String,
         required: true
     },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
     description: {
         type: String
     },

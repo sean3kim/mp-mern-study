@@ -39,6 +39,7 @@ exports.getAreas = async (req, res, next) => {
             .populate("boulders", ["name", "grade"])
             .populate("path", ["name"])
             .populate("parent", ["name"])
+            .populate("author", ["_id", "username"])
         res.json({ success: true, areas: allAreas });
     } catch (e) {
         next(e);
@@ -52,6 +53,7 @@ exports.getOneArea = async (req, res, next) => {
             .populate("boulders")
             .populate("path", ["name"])
             .populate("parent", ["name"])
+            .populate("author", ["_id", "username"])
         if (!foundArea) {
             return next(new ErrorResponse("could not find area", 404));
         }
@@ -63,16 +65,18 @@ exports.getOneArea = async (req, res, next) => {
 
 exports.addArea = async (req, res, next) => {
     try {
-        const { name, description, boulders, path, parent } = req.body;
+        const { name, description, boulders, path, parent, userId } = req.body;
 
+        const foundUser = await User.findById(userId);
         // create a new area
-        const newArea = new Area({ name, description, boulders, path, parent });
+        const newArea = new Area({ name, description, boulders, path, parent, author: foundUser });
         await newArea.save();
 
         const populatedArea = await Area.findById(newArea._id)
             .populate("boulders")
             .populate("path", ["name"])
             .populate("parent", ["name"])
+            .populate("author", ["_id", "username"])
         res.json({ success: true, area: populatedArea });
 
     } catch (e) {

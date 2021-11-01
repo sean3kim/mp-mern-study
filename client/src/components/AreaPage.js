@@ -37,6 +37,7 @@ const AreaPage = () => {
         dispatch(fetchOneArea(id));
     }, [])
 
+    const currentUser = useSelector((state) => state.users.users);
     const area = useSelector((state) => state.areas.byId[id]);
     const areaBoulders = useSelector((state) => {
         let boulders = [];
@@ -60,6 +61,7 @@ const AreaPage = () => {
                         {area.path.map((element) => <Typography key={element._id} display="inline">{element.name} &gt; </Typography>)}
                         <Typography variant="h4">{area.name}</Typography>
                     </div>
+                    <Typography variant="body1">submitted by: {area.author.username}</Typography>
                     <Typography variant="h5">description</Typography>
                     <Typography variant="body1">{area.description}</Typography>
                 </>
@@ -89,18 +91,20 @@ const AreaPage = () => {
                     add a new boulder
                 </Button>
             </Link>
-            <div >
-                <Button
-                    startIcon={<DeleteIcon />}
-                    className={classes.deleteButton}
-                    color="secondary"
-                    variant="contained"
-                    size="small"
-                    onClick={handleDelete}
-                >
-                    delete
-                </Button>
-            </div>
+            {(currentUser && currentUser._id === area.author._id) &&
+                <div >
+                    <Button
+                        startIcon={<DeleteIcon />}
+                        className={classes.deleteButton}
+                        color="secondary"
+                        variant="contained"
+                        size="small"
+                        onClick={handleDelete}
+                    >
+                        delete
+                    </Button>
+                </div>
+            }
         </Paper>
     )
 }

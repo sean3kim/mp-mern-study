@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory, Link } from "react-router-dom"
 import { makeStyles, Container, Paper, TextField, Button, Typography } from "@material-ui/core";
 import { addArea } from "../features/areas/areasThunks";
@@ -45,6 +45,7 @@ const AddArea = () => {
     const fromArea = location.state && location.state.fromArea;
     const classes = useStyles();
 
+    const currentUser = useSelector((state) => state.users.users)
     useEffect(() => {
         if (fromArea) {
             setPath([...fromArea.path, { _id: fromArea._id, name: fromArea.name }]);
@@ -60,6 +61,7 @@ const AddArea = () => {
             boulders,
             path,
             parent,
+            userId: currentUser._id
         }))
         history.push("/areas");
     }
